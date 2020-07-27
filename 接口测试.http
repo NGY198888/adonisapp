@@ -1,0 +1,48 @@
+@url=http://localhost:3333
+###  content-type: application/json
+###Authorization: token xxx
+GET {{url}}
+content-type: application/json
+
+{
+    "name":"21111",
+    "name2":"22222",
+    "type":1
+}
+###
+GET {{url}}/admin/api/site
+###
+GET {{url}}/admin/api/posts
+
+
+###
+POST {{url}}/admin/api/posts
+content-type: application/json
+
+{
+    "title":"第1个博客",
+    "content":"博客内容"
+}
+###
+PUT {{url}}/admin/api/posts/5f05468d1ee53334e0e7dcff
+content-type: application/json
+
+{
+    "title":"第5个博客",
+    "content":"博客内容"
+}
+###
+DELETE  {{url}}/admin/api/posts/5f05468a1ee53334e0e7dcfe
+
+###
+POST {{url}}/admin/api/reg
+content-type: application/json
+
+{
+    "username":"admin3@163.com",
+    "password":"123456"
+
+}
+
+###  商品预警接口
+GET http://sf.gx90w.com:8080/sf/goods/getListWrning?shop=testshop
