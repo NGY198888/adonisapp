@@ -1,7 +1,7 @@
 'use strict'
 
 const Exceptions = require("@adonisjs/lucid/src/Exceptions");
-
+const UUID = require('uuid');
 const CrudHook = exports = module.exports = {}
 
 CrudHook.addDeleteAt = async (modelInstance) => {
@@ -9,6 +9,12 @@ CrudHook.addDeleteAt = async (modelInstance) => {
         modelInstance[modelInstance.constructor.delete_at]=null;
     }
 }
+CrudHook.addID = async (modelInstance) => {
+  if(!modelInstance.primaryKeyValue){
+    modelInstance.primaryKeyValue=UUID.v4();
+  }
+}
+
 CrudHook.uniqueCheck = async (modelInstance) => {
     //判断某个字段的值在该表是否重复
     const dealrs=(modelInstance,rs,_field)=>{
@@ -32,10 +38,12 @@ CrudHook.uniqueCheck = async (modelInstance) => {
                  let qobj=  {}
                  qobj[_field]=val
                  qobj[modelInstance.constructor.primaryKey]={$ne:modelInstance.primaryKeyValue}
-                let rs= await modelInstance.constructor.where(qobj).ignoreScopes().fetch()
+                let rs= await modelInstance.constructor.baseQuery.where(qobj).ignoreScopes().fetch()
                 dealrs(modelInstance,rs,_field)
             }else{
-                let rs= await modelInstance.constructor.where(_field,modelInstance[_field]).fetch()
+                console.log(modelInstance);
+                const val=modelInstance[_field]
+                let rs= await modelInstance.constructor.baseQuery.where(_field,val).fetch()
                 dealrs(modelInstance,rs,_field)
             }
        }

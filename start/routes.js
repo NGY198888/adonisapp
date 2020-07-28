@@ -22,7 +22,7 @@ const { resolver, ioc } = require('@adonisjs/fold')
 const Helpers = use('Helpers')
 // Route.get('/','Admin/SiteController.site')
 Route.get('/api/blog','BlogController.index')
-Route.post('admin/api/reg','Admin/UserController.store')
+Route.post('admin/api/reg','UserController.reg')
 Route.post('admin/api/login','UserController.login')
 
 let crud_list=['users','posts'];
@@ -73,7 +73,7 @@ Route.group(() => {
 
 
 
-}).prefix("admin/api")//.middleware('auth');//
+}).prefix("admin/api").middleware('auth');//
 // Route.get('/:id','SetController.index')
 // Route.on('/').render('welcome')
 // Route.resource('/api/:resource', 'RestController')

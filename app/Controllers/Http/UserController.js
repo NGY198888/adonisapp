@@ -11,10 +11,10 @@ const Hash = use('Hash')
 const Logger = use('Logger')
 class UserController {
    async login({request,session,response,auth}){
-     for (let index = 0; index < 1000; index++) {
-      console.log(11111111111);
+    //  for (let index = 0; index < 1000; index++) {
+    //   console.log(11111111111);
 
-     }
+    //  }
     let data=request.only(['password', 'username']);
     const rules = {
         username: 'required|email',
@@ -64,6 +64,33 @@ class UserController {
          auth.logout();
          Logger.info(`用户登出  ${_user}`);
          response.redirect('/login')
+   }
+   async reg ({ request, response,session }) {
+    let _model= User;
+    const rules = {
+        username: 'required|email|unique:users,username',
+        password: 'required'
+      }
+      const msgs={
+        'username.required': '用户名未填写',
+        'username.unique': '用户名已存在',
+        'password.required': '密码未填写',
+        'username.email': '用户名需要填写邮箱',
+      };
+      console.log(request.all());
+      let  data=request.only(['password', 'username'])
+      const validation = await validate(request.all(), rules,msgs)
+
+      if (validation.fails()) {
+          return response.status(422).send({
+            message:validation.messages()
+        });
+      }
+      data.email=data.username
+      let user=new _model();
+      user=Object.assign(user,data);
+      await user.save();
+      return user;
    }
 }
 

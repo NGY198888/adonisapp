@@ -3,16 +3,20 @@
 const Exceptions = require('@adonisjs/lucid/src/Exceptions');
 const { ModelException } = require('@adonisjs/lucid/src/Exceptions');
 const _lodash = require('lodash');
-/** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
+const GridConf = require('../crud/conf/GridConf');
+const BaseBtn = require('../crud/btn/BaseBtn');
+// /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
 // const ErrCode=require('../ErrCode')
 
 class Crud extends Model {
    static boot () {
         super.boot()
+        this.addHook('beforeCreate', 'CrudHook.addID')
         this.addHook('beforeCreate', 'CrudHook.addDeleteAt')
         this.addHook('beforeSave', 'CrudHook.uniqueCheck')
    }
+
    static get rules(){
        let rules={};
         let fields= this._fields2ObjArr( this.fields,"validator")
@@ -57,21 +61,23 @@ class Crud extends Model {
    static get grid(){
        const _fields=  this.fields
        let fields = this._fields2ObjArr(_fields,"grid");
+       let formFields = this._fields2ObjArr(_fields,"form");
+       let viewFields = this._fields2ObjArr(_fields,"view");
        let searchFields = this._fields2ObjArr(_fields,"searchable");
-       let searchModel={}
-       const searchableFields= _lodash.filter(_fields, (_field)=>{
-          return !!_field.searchable
-       });
-       searchableFields.forEach(_field => {
-           if(_field.default!=undefined&&_field.default!=null){
-             searchModel[_field.field]=_field.default
-           }
-       });
-       return {
-          fields,
-          searchFields,
-          searchModel
-       };
+        searchFields.forEach(_field => {
+          _field.val=_field.searchVal||null;
+        });
+      //  const searchableFields= _lodash.filter(_fields, (_field)=>{
+      //     return !!_field.searchable
+      //  });
+      //  searchableFields.forEach(_field => {
+      //      _field.val=_field.searchVal||null;
+      //  });
+       return new GridConf(this.table)
+       .setFields(fields,formFields,viewFields,searchFields)
+       .setPagination(true)
+       .addCrudBtn()
+       ;
    }
    static get form(){
         let fields = this._fields2ObjArr(this.fields,"form");
@@ -85,7 +91,7 @@ class Crud extends Model {
         });
         let fields = [];
         formFields.forEach(_field => {
-            fields.push(_field) ;
+            fields.push(_lodash.cloneDeep(_field)) ;
         });
         return fields;
     }
@@ -110,16 +116,10 @@ class Crud extends Model {
    static get baseQuery(){
     const query = this.query()
      if(this.delete_at){
-        let qObj={};
-        let v=[null];
-       console.log( _lodash.isArray(v),v);
-        // qObj["delete_at"]={"$in":v, "$exists":true}
-        // qObj["delete_at"]={$ne:null}
-        return query.where(qObj)
+        return query.whereNull(this.delete_at)
      }else{
         return query;
      }
-
    }
    static get incrementing () {
     return false
@@ -165,6 +165,33 @@ class Crud extends Model {
           throw error;
       }
 
+  }
+  async parseQuery(request){
+    let query= (request.all().query);
+    query = JSON.parse(query|| "{}");
+    const { page = 1, perPage = 10, sort = null, where = [] } = query;
+    let queryBuild=  this.constructor.baseQuery;
+    where.forEach(field => {
+      if(field.val){
+        let instance=null;
+
+        try {
+           let clazz=use(`App/crud/field/${field.type}Field`)
+           instance=new clazz(field.label,field.field,field.val);
+           instance=Object.assign(instance,field)
+        } catch (error) {
+           throw new Error(`类型 ${field.type}Field 不存在`);
+        }
+        try {
+          instance.parseQuery(queryBuild)
+        } catch (error) {
+           throw new Error(`类型 ${field.type}Field parseQuery异常`);
+        }
+
+      }
+    });
+    sort&&(queryBuild=queryBuild.orderBy(...sort.split(' ')))
+    return await queryBuild.paginate(page,perPage);
   }
 
 }

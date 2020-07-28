@@ -18,21 +18,21 @@ module.exports = {
   */
   authenticator: 'jwt',
   session: {
-    serializer: 'LucidMongo',
+    serializer: 'lucid',
     model: 'App/Models/User',
     scheme: 'session',
     uid: 'email',
     password: 'password'
   },
   basic: {
-    serializer: 'LucidMongo',
+    serializer: 'lucid',
     model: 'App/Models/User',
     scheme: 'basic',
     uid: 'email',
     password: 'password'
   },
   jwt: {
-    serializer: 'LucidMongo',
+    serializer: 'lucid',
     model: 'App/Models/User',
     token: 'App/Models/Token',
     scheme: 'jwt',
@@ -44,7 +44,7 @@ module.exports = {
     }
   },
   api: {
-    serializer: 'LucidMongo',
+    serializer: 'lucid',
     scheme: 'api',
     model: 'App/Models/User',
     token: 'App/Models/Token',
@@ -52,6 +52,46 @@ module.exports = {
     password: '',
     expiry: '30d',
   },
+
+
+
+  // authenticator: 'jwt',
+  // session: {
+  //   serializer: 'LucidMongo',
+  //   model: 'App/Models/User',
+  //   scheme: 'session',
+  //   uid: 'email',
+  //   password: 'password'
+  // },
+  // basic: {
+  //   serializer: 'LucidMongo',
+  //   model: 'App/Models/User',
+  //   scheme: 'basic',
+  //   uid: 'email',
+  //   password: 'password'
+  // },
+  // jwt: {
+  //   serializer: 'LucidMongo',
+  //   model: 'App/Models/User',
+  //   token: 'App/Models/Token',
+  //   scheme: 'jwt',
+  //   uid: 'email',
+  //   password: 'password',
+  //   expiry: '20m',
+  //   options: {
+  //     secret: Env.get('APP_KEY','00000000000000000000')
+  //   }
+  // },
+  // api: {
+  //   serializer: 'LucidMongo',
+  //   scheme: 'api',
+  //   model: 'App/Models/User',
+  //   token: 'App/Models/Token',
+  //   uid: 'username',
+  //   password: '',
+  //   expiry: '30d',
+  // },
+
 
   // /*
   // |--------------------------------------------------------------------------

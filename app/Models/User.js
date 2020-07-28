@@ -1,46 +1,38 @@
 'use strict'
 
 const Crud=require('./Crud');
+const TextField = require('../crud/field/TextField');
+const DateField = require('../crud/field/DateField');
 class User extends Crud {
   static boot () {
     super.boot()
     this.addHook('beforeSave', 'UserHook.encryptionPwd')
     this.addHook('beforeSave', 'UserHook.addEmail')
   }
+  static get delete_at(){
+    return 'deleted_at';
+  }
   static get hidden () {
     return ['password']
   }
-  static get grid(){
+  static get rule_msgs(){
     return {
-      fields:{
-        _id:{label:'ID'},
-        username:{label:'用户名'},
-        updated_at:{label:'更新时间',type:'datetime'},
-        created_at:{label:'创建时间',type:'datetime'},
-      }
-    }
+        'title.required': '标题未填写',
+        'content.required': '内容未填写',
+        'title.unique': '标题重复',
+    };
+ }
+  static get fields(){
+    return [
+          new TextField('_id','id').setUIConf(true,true,true,false,false).setDBConf(true,true,'required').check(),
+          new TextField('用户名','username').setUIConf(true,true,true,true,true).setVal("编辑的值").setDBConf(true,true,'required').check(),
+          new TextField('邮箱','email').setUIConf(true,true,true,false,false).setDBConf(true,true,'required').check(),
+          new DateField('更新时间','updated_at').setUIConf(true,true,true,false,false).setDBConf(true,false,'required').check(),
+          new DateField('创建时间','created_at').setUIConf(true,true,true,false,false).setDBConf(true,false,'required').check(),
+        ]
   }
-  static get form(){
-    return {
-        fields:{
-          username:{label:'用户名'},
-          password:{label:'密码'},
-        }
-    }
-  }
-  static get view(){
-    return {
-      fields:{
-        username:{label:'用户名'},
-        updated_at:{label:'更新时间',type:'datetime'},
-        created_at:{label:'创建时间',type:'datetime'},
-      }
-    }
-  }
-  static get saveFields(){
-    return ['username','password'];
-  }
- 
+
+
   // static get delete_at(){
   //   return 'delete_at';
   // }
@@ -58,6 +50,6 @@ class User extends Crud {
   tokens () {
     return this.hasMany('App/Models/Token')
   }
-  
+
 }
 module.exports = User

@@ -16,7 +16,7 @@ module.exports = {
   | interacting with SQL databases.
   |
   */
-  connection: Env.get('DB_CONNECTION', 'mongodb'),
+  connection: Env.get('DB_CONNECTION', 'mysql'),
 
   /*
   |--------------------------------------------------------------------------
@@ -51,9 +51,9 @@ module.exports = {
     client: 'mysql',
     connection: {
       host: Env.get('DB_HOST', 'localhost'),
-      port: Env.get('DB_PORT', ''),
+      port: Env.get('DB_PORT', '3306'),
       user: Env.get('DB_USER', 'root'),
-      password: Env.get('DB_PASSWORD', ''),
+      password: Env.get('DB_PASSWORD', '123456'),
       database: Env.get('DB_DATABASE', 'adonis')
     }
   },
@@ -68,7 +68,7 @@ module.exports = {
       database: Env.get('DB_DATABASE', 'adonis'),
       connectionString:Env.get('DB_CONNECTION_STRING',''),
       options:{
-        
+
       }
     }
   },

@@ -9,7 +9,7 @@ const Hash = use('Hash')
 const CrudController = require("./CrudController")
 
 class UserController  extends CrudController{
-     
+
       /**
      * Show a list of all abresources.
      * GET abresources
@@ -29,9 +29,9 @@ class UserController  extends CrudController{
     // get resource(){
     //   const request = global.request
     //   let url=_lodash.trimStart(global.request.url() ,'admin/api')
-    //   let name= inflection.classify(url.split('/')[0]) 
+    //   let name= inflection.classify(url.split('/')[0])
     //   console.log('url',url,name);
-    
+
     //   return 'User';
     // }
     /**
@@ -45,8 +45,8 @@ class UserController  extends CrudController{
      */
     async create ({ request, response, view }) {
     }
-   
-  
+
+
     /**
      * Create/save a new abresource.
      * POST abresources
@@ -56,7 +56,7 @@ class UserController  extends CrudController{
      * @param {Response} ctx.response
      */
     async store ({ request, response,session }) {
-     let _model=  this.model;
+        let _model=  this.model;
         const rules = {
             username: 'required|email|unique:users,username',
             password: 'required'
@@ -70,7 +70,7 @@ class UserController  extends CrudController{
           console.log(request.all());
           let  data=request.only(['password', 'username'])
           const validation = await validate(request.all(), rules,msgs)
-      
+
           if (validation.fails()) {
               return response.status(422).send({
                 message:validation.messages()
@@ -170,7 +170,7 @@ class UserController  extends CrudController{
     }
     async form(){
       console.log('form');
-      
+
       return {
         fields:{
           username:{label:'用户名'},
