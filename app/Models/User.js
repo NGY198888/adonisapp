@@ -17,18 +17,18 @@ class User extends Crud {
   }
   static get rule_msgs(){
     return {
-        'title.required': '标题未填写',
+        'username.required': '用户名未填写',
         'content.required': '内容未填写',
         'title.unique': '标题重复',
     };
  }
   static get fields(){
     return [
-          new TextField('_id','id').setUIConf(true,true,true,false,false).setDBConf(true,true,'required').check(),
+          new TextField('_id','id').setUIConf(false,false,false,false,false).setDBConf(true,false).check(),
           new TextField('用户名','username').setUIConf(true,true,true,true,true).setVal("编辑的值").setDBConf(true,true,'required').check(),
-          new TextField('邮箱','email').setUIConf(true,true,true,false,false).setDBConf(true,true,'required').check(),
-          new DateField('更新时间','updated_at').setUIConf(true,true,true,false,false).setDBConf(true,false,'required').check(),
-          new DateField('创建时间','created_at').setUIConf(true,true,true,false,false).setDBConf(true,false,'required').check(),
+          new TextField('邮箱','email').setUIConf(true,true,true,false,false).setDBConf(true,false).check(),
+          new DateField('更新时间','updated_at').setUIConf(true,false,true,false,false).setDBConf(true,false).check(),
+          new DateField('创建时间','created_at').setUIConf(true,false,true,false,false).setDBConf(true,false).check(),
         ]
   }
 

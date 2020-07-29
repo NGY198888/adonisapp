@@ -4,15 +4,18 @@ const BtnAction = require("../btn/BtnAction");
 const BaseField = require("../field/BaseField");
 const ActionType = require('../btn/ActionType');
 const BtnPosition = require('../btn/BtnPosition');
+const ColorType = require('../btn/ColorType');
 class GridConf {
   /**
    * 表格配置
-   * @param {*} table 表名
-   * @param {*} sortStr 排序字符串， 比如'age desc'
-   * @param {*} multCheck 是否支持多选
+   * @param {string} table 表名
+   * @param {string} key 表主键
+   * @param {string} sortStr 排序字符串， 比如'age desc'
+   * @param {boolean} multCheck 是否支持多选
    */
-  constructor(table,sortStr=null,multCheck=false){
+  constructor(table,key='id',sortStr=null,multCheck=false){
     this.table=table
+    this.key=key
     this.sortStr=sortStr
     this.multCheck=multCheck
     this.tableSearchFields=[]
@@ -70,11 +73,13 @@ class GridConf {
   }
   /**
    * 添加增删改按钮
+   * @param {boolean} needConfirm 是否需要删除确认
    */
-  addCrudBtn(){
-      this.addBtn(new BaseBtn('新建',BtnPosition.Table,BtnAction.Add,ActionType.FORM))
-          .addBtn(new BaseBtn('编辑',BtnPosition.Row,BtnAction.Edit,ActionType.FORM))
-          .addBtn(new BaseBtn('删除',BtnPosition.Table,BtnAction.Delete,ActionType.API))
+  addCrudBtn(needConfirm){
+      this.addBtn(new BaseBtn('新建',BtnPosition.Table,BtnAction.Add,ActionType.FORM).setUI(null,ColorType.success))
+          .addBtn(new BaseBtn('编辑',BtnPosition.Row,BtnAction.Edit,ActionType.FORM).setUI(null,ColorType.primary))
+          .addBtn(new BaseBtn('删除',BtnPosition.Row,BtnAction.Delete,ActionType.API).setUI(null,ColorType.danger)
+          .setConfirmTips(needConfirm?"此操作将删除该数据!，您是否要继续？":null))
       return this;
   }
   /**

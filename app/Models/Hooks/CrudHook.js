@@ -20,7 +20,7 @@ CrudHook.uniqueCheck = async (modelInstance) => {
     const dealrs=(modelInstance,rs,_field)=>{
         if(rs.rows.length>0)
         {
-            let msg=_field+"已存在";
+            let msg=modelInstance[_field]+"已存在";
             const rule_msgs= modelInstance.constructor.rule_msgs
             const _key=_field+'.unique';
             if(rule_msgs&&rule_msgs.hasOwnProperty(_key)){

@@ -37,43 +37,7 @@ class CrudController {
      */
     async index ({ request, response, view }) {
       return new this.model().parseQuery(request);
-      //   console.log(request.all());
-      //   let query= (request.all().query);
-      //   query = JSON.parse(query|| "{}");
-      //   const { page = 1, perPage = 10, sort = null, where = null } = query;
-      //   query.where=query.where||{}
-      //   _lodash.mapValues(query.where, (v, k) => {
-      //     if (v === '' || v === null || _lodash.isEqual(v, []) || _lodash.isEqual(v, [null])) {
-      //       return delete query.where[k]
-      //     }
-      //     const isDate = ['created_at', 'updated_at'].includes(k)
-      //     if (isDate) {
-      //       let [begin, end] = v
-      //       if (_lodash.isString(v)) {
-      //         begin=new Date(v);
-      //         end =new Date(v);
-      //         end=end.setDate(begin.getDate()+1);
-      //         end=new Date(end);
-      //       }
-      //       if (!end) {
-      //         end =new Date(begin) + 1
-      //       }
-      //       query.where[k] = { $gte: begin, $lte: end }
-      //       return
-      //     }
-      //     if (_lodash.isString(v)) {
-      //         query.where[k] = new RegExp(v.replace('*', ''), 'i')
-      //     }
-      //     if (_lodash.isArray(v) && !_lodash.isObject(v[0])) {
-      //         query.where[k] = { $in: v }
-      //     }
-      //   })
-      //   console.log( query.where);
-      //   // return await this.model.baseQuery.where( query.where).sort(sort).paginate(page,perPage);
-      //  let queryBuild=  this.model.baseQuery.where( query.where);
-      //   sort&&(queryBuild=queryBuild.orderBy(...sort.split(' ')))
-      //   return await queryBuild.paginate(page,perPage);
-      }
+    }
 
       /**
        * Render a form to be used for creating a new abresource.
@@ -107,7 +71,8 @@ class CrudController {
                 });
               }
             }
-            let model_instance=new _model(data);
+            let model_instance=new _model();
+            model_instance=Object.assign(model_instance,data);
             await model_instance.save();
             return model_instance;
       }

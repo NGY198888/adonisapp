@@ -20,12 +20,9 @@ class Crud extends Model {
    static get rules(){
        let rules={};
         let fields= this._fields2ObjArr( this.fields,"validator")
-        for (const key in fields) {
-            if (fields.hasOwnProperty(key)) {
-                const field = fields[key];
-                rules[key]=field['validator']
-            }
-        }
+        fields.forEach(field => {
+          rules[field.field]=field.validator
+        });
         return rules;
    }
    static get rule_msgs(){
@@ -73,10 +70,10 @@ class Crud extends Model {
       //  searchableFields.forEach(_field => {
       //      _field.val=_field.searchVal||null;
       //  });
-       return new GridConf(this.table)
+       return new GridConf(this.table,'id')
        .setFields(fields,formFields,viewFields,searchFields)
        .setPagination(true)
-       .addCrudBtn()
+       .addCrudBtn(true)
        ;
    }
    static get form(){
