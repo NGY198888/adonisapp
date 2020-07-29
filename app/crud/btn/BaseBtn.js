@@ -19,7 +19,8 @@ class BaseBtn {
     this.form_title=name;
     this.form_height=600
     this.form_width='50%'
-    this.needSelect=position==BtnPosition.Table?false:true//是否依赖选中行
+    this.form_disabled=BtnPosition.Hiden==position?true:false;//是否禁用表单内的所有组件
+    this.needSelect=BtnPosition.Table==position?false:true//是否依赖选中行
 
   }
   /**

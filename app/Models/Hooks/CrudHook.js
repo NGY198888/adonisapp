@@ -33,17 +33,20 @@ CrudHook.uniqueCheck = async (modelInstance) => {
     if(uniqueFields&&uniqueFields.length>0){
        for (const key in uniqueFields) {
             const _field= uniqueFields[key]
+            let qb= modelInstance.constructor.baseQuery
             if(modelInstance.$persisted){
                 const val=modelInstance[_field]
-                 let qobj=  {}
-                 qobj[_field]=val
-                 qobj[modelInstance.constructor.primaryKey]={$ne:modelInstance.primaryKeyValue}
-                let rs= await modelInstance.constructor.baseQuery.where(qobj).ignoreScopes().fetch()
+                //  let qobj=  {}  这是mongodb写法
+                //  qobj[_field]=val
+                //  qobj[modelInstance.constructor.primaryKey]={$ne:modelInstance.primaryKeyValue}
+                // let rs= await qb.where(qobj).ignoreScopes().fetch()
+                let rs= await qb.where(_field,val).whereNot(modelInstance.constructor.primaryKey,modelInstance.primaryKeyValue).fetch()
                 dealrs(modelInstance,rs,_field)
             }else{
-                console.log(modelInstance);
+                // console.log(modelInstance);
                 const val=modelInstance[_field]
-                let rs= await modelInstance.constructor.baseQuery.where(_field,val).fetch()
+                // let rs= await modelInstance.constructor.baseQuery.where(_field,val).fetch()
+                let rs= await qb.where(_field,val).fetch()
                 dealrs(modelInstance,rs,_field)
             }
        }

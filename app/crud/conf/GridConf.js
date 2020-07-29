@@ -78,6 +78,7 @@ class GridConf {
   addCrudBtn(needConfirm){
       this.addBtn(new BaseBtn('新建',BtnPosition.Table,BtnAction.Add,ActionType.FORM).setUI(null,ColorType.success))
           .addBtn(new BaseBtn('编辑',BtnPosition.Row,BtnAction.Edit,ActionType.FORM).setUI(null,ColorType.primary))
+          .addBtn(new BaseBtn('查看',BtnPosition.Hiden,BtnAction.Show,ActionType.FORM).setUI(null,ColorType.info))
           .addBtn(new BaseBtn('删除',BtnPosition.Row,BtnAction.Delete,ActionType.API).setUI(null,ColorType.danger)
           .setConfirmTips(needConfirm?"此操作将删除该数据!，您是否要继续？":null))
       return this;

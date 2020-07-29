@@ -3,6 +3,7 @@ var inflection = require( 'inflection' );
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Validator')} */
 const {validate}=use('Validator')
 const _lodash = require('lodash');
+const { unset } = require('lodash');
 class CrudController {
     get isCrud(){
        return true;
@@ -62,7 +63,7 @@ class CrudController {
        */
       async store ({ request, response,session }) {
             let _model=  this.model;
-            let data = this.getData(request, _model);
+            let data = this.getData(request, _model,'Add');
             if(_model.rules){
               const validation = await validate(request.all(), _model.rules,_model.rule_msgs)
               if (validation.fails()) {
@@ -77,15 +78,18 @@ class CrudController {
             return model_instance;
       }
 
-    getData(request, _model) {
-      //没有填的字段可能不会上传，导致该数据缺少字段，这里要将这些字段填空
+    getData(request, _model,action='Add') {
+      //新增时没有填的字段可能不会上传，导致该数据缺少字段，这里要将这些字段填空
+      //但是更新的时候是上传什么就更新什么，填空不能做
       let data = request.only(_model.saveFields);
-      let _obj = {};
-      _lodash.reduce(_model.saveFields, function (obj, param) {
-        obj[param] = null;
-        return obj;
-      }, _obj);
-      data = _lodash.merge(_obj, data);
+      if(action=="Add"){
+        let _obj = {};
+        _lodash.reduce(_model.saveFields, function (obj, param) {
+          obj[param] = null;
+          return obj;
+        }, _obj);
+        data = _lodash.merge(_obj, data);
+      }
       return data;
     }
 
@@ -128,7 +132,8 @@ class CrudController {
       async update ({ params, request, response }) {
         let _model=  this.model;
         const model_instance= await _model.find(params.id);
-        let data = this.getData(request, _model);
+        let data = this.getData(request, _model,'Edit');
+
         if(_model.rules){
           const validation = await validate(request.all(), _model.rules,_model.rule_msgs)
           if (validation.fails()) {
