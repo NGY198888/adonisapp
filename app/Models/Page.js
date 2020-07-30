@@ -6,6 +6,7 @@ const SwitchField = require('../crud/field/SwitchField');
 const SelectField = require('../crud/field/SelectField');
 const ColumnTpl = require('../crud/field/ColumnTpl');
 const TabField = require('../crud/field/TabField');
+const IconField = require('../crud/field/IconField');
 
 class Page extends Crud {
     static boot () {
@@ -31,7 +32,7 @@ class Page extends Crud {
           new TextField('页面名称','name').setUIConf(true,true,true,true,true).setDBConf(true,true,'required').check(),
           new TabField('测试面板2'),
           new TextField('页面地址','url').setUIConf(true,true,true,true,true).setDBConf(true,true,'required').check(),
-          new TextField('图标','icon').setUIConf(true,true,true,true,true).setDBConf(true,false).check(),
+          new IconField('图标','icon').setUIConf(true,true,true,true,true).setDBConf(true,false).check(),
           new SwitchField('是否菜单','isMenu').setUIConf(true,true,true,false,false)
           .setDBConf(true,false)
           .setColumnTpl(ColumnTpl.Tag,{
