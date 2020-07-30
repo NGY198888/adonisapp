@@ -37,6 +37,23 @@ class CrudController {
      * @param {View} ctx.view
      */
     async index ({ request, response, view }) {
+      // let rs={
+      //   "total": 10000,
+      //   "perPage": 10000,
+      //   "page": 1,
+      //   "lastPage": null,
+      //   "data": [ ]
+      // }
+      // let item={
+      //   "id": "cb555738-120a-47d1-b973-633c74462b19",
+      //   "username": "admin",
+      //   "email": "admin2222",
+      //   "created_at": "2020-07-29 18:24:18",
+      //   "updated_at": "2020-07-30 00:44:54",
+      //   "deleted_at": null
+      // };
+      // rs.data= Array(10000).fill(item)
+      // return rs; // 模拟大分页数据，结果在页面渲染那边卡很久
       return new this.model().parseQuery(request);
     }
 
@@ -63,28 +80,29 @@ class CrudController {
        */
       async store ({ request, response,session }) {
             let _model=  this.model;
-            let data = this.getData(request, _model,'Add');
-            if(_model.rules){
-              const validation = await validate(request.all(), _model.rules,_model.rule_msgs)
+            let model_instance=new _model();
+            let data =await this.getData(request, model_instance,'Add');
+            if(model_instance.rules()){
+              const validation = await validate(request.all(), model_instance.rules(),model_instance.rule_msgs())
               if (validation.fails()) {
                   return response.status(422).send({
                     message:validation.messages()
                 });
               }
             }
-            let model_instance=new _model();
             model_instance=Object.assign(model_instance,data);
             await model_instance.save();
             return model_instance;
       }
 
-    getData(request, _model,action='Add') {
+   async getData(request, model_instance,action='Add') {
       //新增时没有填的字段可能不会上传，导致该数据缺少字段，这里要将这些字段填空
       //但是更新的时候是上传什么就更新什么，填空不能做
-      let data = request.only(_model.saveFields);
+     let saveFields= await model_instance.saveFields()
+      let data = request.only( saveFields);
       if(action=="Add"){
         let _obj = {};
-        _lodash.reduce(_model.saveFields, function (obj, param) {
+        _lodash.reduce(saveFields, function (obj, param) {
           obj[param] = null;
           return obj;
         }, _obj);
@@ -132,10 +150,10 @@ class CrudController {
       async update ({ params, request, response }) {
         let _model=  this.model;
         const model_instance= await _model.find(params.id);
-        let data = this.getData(request, _model,'Edit');
+        let data =await this.getData(request, model_instance,'Edit');
 
-        if(_model.rules){
-          const validation = await validate(request.all(), _model.rules,_model.rule_msgs)
+        if(model_instance.rules()){
+          const validation = await validate(request.all(), model_instance.rules(),model_instance.rule_msgs())
           if (validation.fails()) {
               return response.status(422).send({
                 message:validation.messages()
@@ -163,13 +181,13 @@ class CrudController {
       /** 列表显示需要的数据 */
       async grid(){
         console.log('进入crud grid');
-        let data=this.model.grid;
+        let data=new this.model().grid();
         return data
       }
        /** 表单显示需要的数据 */
       async form(){
         console.log('进入crud form');
-        return this.model.form
+        return this.model.form()
 
       }
       /**查看显示需要的数据 */

@@ -15,14 +15,14 @@ class User extends Crud {
   static get hidden () {
     return ['password']
   }
-  static get rule_msgs(){
+ rule_msgs(){
     return {
         'username.required': '用户名未填写',
         'content.required': '内容未填写',
         'title.unique': '标题重复',
     };
  }
-  static get fields(){
+ fields(){
     return [
           new TextField('_id','id').setUIConf(false,false,false,false,false).setDBConf(true,false).check(),
           new TextField('用户名','username').setUIConf(true,true,true,true,true).setVal("编辑的值").setDBConf(true,true,'required').check(),
@@ -32,10 +32,6 @@ class User extends Crud {
         ]
   }
 
-
-  // static get delete_at(){
-  //   return 'delete_at';
-  // }
 
   /**
    * A relationship on tokens is required for auth to

@@ -84,12 +84,15 @@ class BaseField {
     }
     /**
      * 字段查询方式 子类要重写此方法
-     * @param {*} queryBuild 查询对象  queryBuild=queryBuild.where(this.field,'like', `%${this.val}%`)
+     * @param {*} query 查询对象  query.where(this.field,'like', `%${this.val}%`)
      * @returns BaseField
      */
-    parseQuery(queryBuild) {
+    parseQuery(query,_model) {
      //子类要重写此方法，并返回this
       return this
     }
+    _field(_model){
+      return `${_model.tableAlias()}.${this.field}`
+   }
 }
 module.exports=BaseField;

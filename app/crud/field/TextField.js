@@ -5,8 +5,8 @@ class TextField extends BaseField{
     super(label, field)
     this.type="text"
   }
-  parseQuery(queryBuild) {
-    queryBuild=queryBuild.where(this.field,'like', `%${this.val}%`);
+  parseQuery(query,_model) {
+    query.where(this._field(_model),'like', `%${this.val}%`);
     return this
   }
 }

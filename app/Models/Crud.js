@@ -17,22 +17,22 @@ class Crud extends Model {
         this.addHook('beforeSave', 'CrudHook.uniqueCheck')
    }
 
-   static get rules(){
+  async  rules(){
        let rules={};
-        let fields= this._fields2ObjArr( this.fields,"validator")
+        let fields= this._fields2ObjArr(await this.fields(),"validator")
         fields.forEach(field => {
           rules[field.field]=field.validator
         });
         return rules;
    }
-   static get rule_msgs(){
+    rule_msgs(){
        return {};
    }
    //需要保存到数据库的字段
-   static get saveFields(){
-        return this._fields2arr(this.fields,"save");
+   async  saveFields(){
+        return this._fields2arr(await this.fields(),"save");
    }
-    static _fields2arr(_fields,key) {
+    _fields2arr(_fields,key) {
         const saveFields = _lodash.filter(_fields, (_field) => {
             return !!_field[key];
         });
@@ -43,10 +43,10 @@ class Crud extends Model {
         return fields;
     }
    //不能重复的字段
-   static get uniqueFields(){
-       return this._fields2arr(this.fields,"unique");
+   async uniqueFields(){
+       return this._fields2arr(await this.fields(),"unique");
    }
-   static get fields(){
+  async fields(){
 //     return [
 //         {field:'_id',label:'ID'},
 //         {field:'title',label:'标题',type:'text',default:null,placeholder:"搜索标题",searchable: true,grid:true,form:true,view:true,save:true},
@@ -55,8 +55,8 @@ class Crud extends Model {
 //    ]
     throw new Error(this.name+' model未设置 fields 返回');
    }
-   static get grid(){
-       const _fields=  this.fields
+   async   grid(){
+       const _fields= await this.fields()
        let fields = this._fields2ObjArr(_fields,"grid");
        let formFields = this._fields2ObjArr(_fields,"form");
        let viewFields = this._fields2ObjArr(_fields,"view");
@@ -76,13 +76,13 @@ class Crud extends Model {
        .addCrudBtn(true)
        ;
    }
-   static get form(){
+   async form(){
         let fields = this._fields2ObjArr(this.fields,"form");
         return {
             fields,
         };
    }
-   static  _fields2ObjArr(_fields,key) {
+    _fields2ObjArr(_fields,key) {
         const formFields = _lodash.filter(_fields, (_field) => {
             return !!_field[key];
         });
@@ -93,8 +93,8 @@ class Crud extends Model {
         return fields;
     }
 
-   static get  view(){
-        const _fields=  this.fields
+    async view(){
+        const _fields=  this.fields()
         const ViewFields= _lodash.filter(_fields, (_field)=>{
         return !!_field.view
         });
@@ -110,13 +110,24 @@ class Crud extends Model {
    static get delete_at(){
        return null;
    }
-   static get baseQuery(){
-    const query = this.query()
-     if(this.delete_at){
-        return query.whereNull(this.delete_at)
-     }else{
-        return query;
+   tableAlias(){
+       return 'tableAlias';
+   }
+   baseQuery(){
+    let query = this.constructor.query()
+     if(this.constructor.delete_at){
+        query.whereNull(this.constructor.delete_at)
      }
+    this.selectForm(query)
+    return query;
+   }
+   selectForm(query){
+     let obj={}
+     obj[this.tableAlias()]=this.constructor.table
+     query.from(obj)
+   }
+   selectFields(query){
+      query.select(`${this.tableAlias()}.*`)
    }
    static get incrementing () {
     return false
@@ -163,11 +174,16 @@ class Crud extends Model {
       }
 
   }
+  async onQuery(query){
+    //此处一般用来连表，之后可能需要重新 selectFields   select 要在Join语句后面
+    //query.leftJoin({'p2':'pages'}, 'p2.id', 'p1.pid')
+  }
   async parseQuery(request){
-    let query= (request.all().query);
-    query = JSON.parse(query|| "{}");
-    const { page = 1, perPage = 10, sort = null, where = [] } = query;
-    let queryBuild=  this.constructor.baseQuery;
+    let queryData= (request.all().query);
+    queryData = JSON.parse(queryData|| "{}");
+    const { page = 1, perPage = 10, sort = null, where = [] } = queryData;
+    let query=  this.baseQuery();
+    await this.onQuery(query)
     where.forEach(field => {
       if(field.val){
         let instance=null;
@@ -180,15 +196,16 @@ class Crud extends Model {
            throw new Error(`类型 ${field.type}Field 不存在`);
         }
         try {
-          instance.parseQuery(queryBuild)
+          instance.parseQuery(query,this)
         } catch (error) {
            throw new Error(`类型 ${field.type}Field parseQuery异常`);
         }
 
       }
     });
-    sort&&(queryBuild=queryBuild.orderBy(...sort.split(' ')))
-    return await queryBuild.paginate(page,perPage);
+    sort&&(query.orderBy(...sort.split(' ')))
+    this.selectFields(query)
+    return await query.paginate(page,perPage);
   }
 
 }

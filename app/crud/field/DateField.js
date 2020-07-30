@@ -4,8 +4,9 @@ class DateField extends BaseField{
     super(label, field)
     this.type="date"
   }
-  parseQuery(queryBuild) {
-    queryBuild=queryBuild.whereRaw(`datediff(${this.field}, '${this.val}' )=0`);
+
+  parseQuery(query,_model) {
+    query.whereRaw(`datediff(${this._field(_model)}, '${this.val}' )=0`);
     return this
   }
 }
