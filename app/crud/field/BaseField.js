@@ -1,4 +1,4 @@
-const { isNull } = require("lodash");
+const { isNull, isArray, isObject } = require("lodash");
 const ColumnTpl = require("./ColumnTpl");
 
 class BaseField {
@@ -25,6 +25,15 @@ class BaseField {
         this.type=null;
         this.tpl=null;//表格列里显示的模板类型
         this.tplRules=[];
+
+        this.valDic={}//字段的值映射，比如
+        // {
+        //   '1':'是',
+        //   '0':'否',
+        //   'null':'否'
+        // }
+
+        this.data=[];
     }
     /**
      * UI配置
@@ -108,5 +117,44 @@ class BaseField {
       this.tplRules=tplRules;
       return this;
    }
+   /**
+    * 字段在列表里的值映射
+    * 接收数组和对象
+    *
+    *  {
+    *       '1':'是',
+    *       '0':'否',
+    *       'null':'否'
+    *   }
+    * 或者
+    * [
+    *    {
+    *      "id": "1",
+    *      "txt": "是"
+    *    },
+    *    {
+    *      "id": "0",
+    *      "txt": "否"
+    *    }
+    *  ]
+    * 'null':'xxx' 相当于默认值，没有设置就显示原文本
+    * @param {[Array,Object]} dic 映射字典
+    */
+   setValDic(dic={}){
+     if(!isObject(dic)){
+       throw new Error('字段值映射请传对象');
+     }
+      this.valDic=dic
+      return this;
+   }
+   /**
+   * 设置待选数据
+   * @param {[array,Function,Promise]} data
+   */
+  setData(data=[]){
+    this.data=data
+    this.setValDic(data)
+    return this;
+  }
 }
 module.exports=BaseField;
