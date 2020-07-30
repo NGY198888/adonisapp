@@ -1,4 +1,5 @@
 const { isNull } = require("lodash");
+const ColumnTpl = require("./ColumnTpl");
 
 class BaseField {
   /**
@@ -22,6 +23,8 @@ class BaseField {
         this.val = null;
         this.searchVal=null;
         this.type=null;
+        this.tpl=null;//表格列里显示的模板类型
+        this.tplRules=[];
     }
     /**
      * UI配置
@@ -93,6 +96,17 @@ class BaseField {
     }
     _field(_model){
       return `${_model.tableAlias()}.${this.field}`
+   }
+   /**
+    * 设置列模板
+    * @param {*} tpl 模板类型
+    * @param {*} tplRules  模板规则
+    */
+   setColumnTpl(tpl=ColumnTpl.NotTpl,tplRules=[]){
+      ColumnTpl.check(tpl);
+      this.tpl= tpl;
+      this.tplRules=tplRules;
+      return this;
    }
 }
 module.exports=BaseField;
