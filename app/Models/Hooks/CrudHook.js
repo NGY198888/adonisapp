@@ -21,7 +21,7 @@ CrudHook.uniqueCheck = async (modelInstance) => {
         if(rs.rows.length>0)
         {
             let msg=modelInstance[_field]+"已存在";
-            const rule_msgs= modelInstance.constructor.rule_msgs
+            const rule_msgs= modelInstance.rule_msgs()
             const _key=_field+'.unique';
             if(rule_msgs&&rule_msgs.hasOwnProperty(_key)){
                 msg=rule_msgs[_key]
@@ -29,11 +29,11 @@ CrudHook.uniqueCheck = async (modelInstance) => {
             throw new Error(msg)
         }
     }
-    let uniqueFields= modelInstance.constructor.uniqueFields;
+    let uniqueFields=await modelInstance.uniqueFields();
     if(uniqueFields&&uniqueFields.length>0){
        for (const key in uniqueFields) {
             const _field= uniqueFields[key]
-            let qb= modelInstance.constructor.baseQuery
+            let qb= modelInstance.baseQuery()
             if(modelInstance.$persisted){
                 const val=modelInstance[_field]
                 //  let qobj=  {}  这是mongodb写法

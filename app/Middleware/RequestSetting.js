@@ -9,11 +9,12 @@ class RequestSetting {
         loged=true
         _user="用户:"+auth.user.username
       }
+      request._user=auth.user;
       Logger.info(`请求 url:${request.url()}  ${loged?"已登录":"未登录"} ${_user} `);
    } catch (error) {
-     
+
    }
-    
+
     global.request=request;
     await next()
     try {
@@ -21,9 +22,9 @@ class RequestSetting {
         Logger.info(`业务异常 url:${request.url()}  response异常: ${response.response.statusCode} ${JSON.stringify(response._lazyBody.content)}`);
        }
     } catch (error) {
-      
+
     }
-   
+
   }
 }
 

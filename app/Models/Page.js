@@ -12,6 +12,7 @@ class Page extends Crud {
     static boot () {
       super.boot()
       this.addHook('beforeUpdate', 'PageHook.checkPidIsSelf')
+      this.addHook('afterFind', 'PageHook.fethPage')
     }
     static get rule_msgs(){
         return {
@@ -73,8 +74,8 @@ class Page extends Crud {
         'pname':'p2.name'
       })
     }
-    Pages(){
-      return this.hasOne('App/Models/Page','id','pid')
+    page(){
+       return this.belongsTo('App/Models/Page','pid','id')
     }
 
 }

@@ -124,6 +124,8 @@ class CrudController {
         if(params.id){
           const model_instance= await this.model.find(params.id);
           return model_instance
+        }else{
+          throw new Error('缺少资源id信息');
         }
       }
 
