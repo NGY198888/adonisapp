@@ -11,13 +11,13 @@ class GridConf {
    * @param {string} table 表名
    * @param {string} key 表主键
    * @param {string} sortStr 排序字符串， 比如'age desc'
-   * @param {boolean} multCheck 是否支持多选
+   * @param {boolean} multSelect 是否支持多选
    */
-  constructor(table,key='id',sortStr=null,multCheck=false){
+  constructor(table,key='id',sortStr=null,multSelect=false){
     this.table=table
     this.key=key
     this.sortStr=sortStr
-    this.multCheck=multCheck
+    this.multSelect=multSelect
     this.tableSearchFields=[]
     this.tableFields=[]
     this.formFields=[]
@@ -68,8 +68,18 @@ class GridConf {
       this.buttons.push(btn);
     }
     //根据name去重
-    this.buttons= _.uniqBy(this.buttons,"name")
+    //this.buttons= _.uniqBy(this.buttons,"name")
+    this.buttons.forEach(btn => {
+       if(btn.isMultSelect){
+          this.enableMultSelect()
+       }
+    });
     return this
+  }
+  /** 启用多选 */
+  enableMultSelect(){
+    this.multSelect=true
+    return this;
   }
   /**
    * 添加增删改按钮
@@ -80,7 +90,10 @@ class GridConf {
           .addBtn(new BaseBtn('编辑',BtnPosition.Row,BtnAction.Edit,ActionType.FORM).setUI('el-icon-edit',ColorType.primary))
           .addBtn(new BaseBtn('查看',BtnPosition.Hiden,BtnAction.Show,ActionType.FORM).setUI('el-icon-view',ColorType.info))
           .addBtn(new BaseBtn('删除',BtnPosition.Row,BtnAction.Delete,ActionType.API).setUI('el-icon-delete',ColorType.danger)
-          .setConfirmTips(needConfirm?"此操作将删除该数据!，您是否要继续？":null))
+          .setConfirmTips(needConfirm?"此操作将删除该记录!，您是否要继续？":null))
+          .addBtn(new BaseBtn('删除',BtnPosition.Table,BtnAction.Delete,ActionType.API).setUI('el-icon-delete',ColorType.danger)
+          .enableMultSelect()
+          .setConfirmTips(needConfirm?"此操作将删除选中的所有记录!，您是否要继续？":null))
       return this;
   }
   /**

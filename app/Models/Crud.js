@@ -15,6 +15,11 @@ class Crud extends Model {
         this.addHook('beforeCreate', 'CrudHook.addID')
         this.addHook('beforeCreate', 'CrudHook.addDeleteAt')
         this.addHook('beforeSave', 'CrudHook.uniqueCheck')
+        this.addHook('beforeCreate', 'CrudHook.createSubTable')
+        this.addHook('afterCreate', 'CrudHook.createSubTable')
+        this.addHook('beforeUpdate', 'CrudHook.updateSubTable')
+        this.addHook('afterUpdate', 'CrudHook.updateSubTable')
+
    }
 
   async  rules(){
@@ -24,6 +29,9 @@ class Crud extends Model {
           rules[field.field]=field.validator
         });
         return rules;
+   }
+   subTable(){
+     return [];
    }
     rule_msgs(){
        return {};

@@ -21,7 +21,15 @@ class BaseBtn {
     this.form_width='50%'
     this.form_disabled=BtnPosition.Hiden==position?true:false;//是否禁用表单内的所有组件
     this.needSelect=BtnPosition.Table==position?false:true//是否依赖选中行
+    this.isMultSelect=false;
 
+  }
+  /** 多选按钮 */
+  enableMultSelect(){
+    this.isMultSelect=true;
+    this.position=BtnPosition.Table//多选按钮的位置只能是table级别
+    this.needSelect=true//至少选择一条数据
+    return this;
   }
   /**
    * 设置弹窗属性

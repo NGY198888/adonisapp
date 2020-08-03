@@ -1,6 +1,5 @@
 const { isNull, isArray, isObject } = require("lodash");
 const ColumnTpl = require("./ColumnTpl");
-
 class BaseField {
   /**
    * 按钮
@@ -19,6 +18,7 @@ class BaseField {
         this.validator = null;
         this.field2 = null;
         this.label = label;
+        this.show_label=true;
         this.field = field;
         this.val = null;
         this.searchVal=null;
@@ -154,6 +154,13 @@ class BaseField {
   setData(data=[]){
     this.data=data
     this.setValDic(data)
+    return this;
+  }
+  /**
+   * 有的表格组件，比如一对多子表，可以隐藏左边的label
+   */
+  hideLabel(){
+    this.show_label=false;
     return this;
   }
 }

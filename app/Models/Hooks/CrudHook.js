@@ -2,6 +2,7 @@
 
 const Exceptions = require("@adonisjs/lucid/src/Exceptions");
 const UUID = require('uuid');
+const { unset } = require("lodash");
 const CrudHook = exports = module.exports = {}
 
 CrudHook.addDeleteAt = async (modelInstance) => {
@@ -51,5 +52,50 @@ CrudHook.uniqueCheck = async (modelInstance) => {
             }
        }
     }
+}
+CrudHook.createSubTable= async (modelInstance) => {
+  let map={}
+  if(global.request[`sub_table_map_${modelInstance.constructor.table}`]){
+      map=global.request[`sub_table_map_${modelInstance.constructor.table}`]
+      for (const sub in map) {
+        //  let sub_rows_db= modelInstance.getRelated(sub)
+        let sub_rows= map[sub]
+        let sub_model =modelInstance[sub]()
+        await sub_model.createMany(sub_rows)
+      }
+  }else{
+      let subTable=  modelInstance.subTable();
+     subTable.forEach(sub => {
+      let sub_rows= modelInstance.$attributes[sub]
+      if(sub_rows){
+        map[sub]=sub_rows
+      }
+      unset(modelInstance.$attributes,sub)
+    });
+    global.request[`sub_table_map_${modelInstance.constructor.table}`]=map;
+  }
+}
+CrudHook.updateSubTable= async (modelInstance) => {
+  let map={}
+  if(global.request[`sub_table_map_${modelInstance.constructor.table}`]){
+      map=global.request[`sub_table_map_${modelInstance.constructor.table}`]
+      for (const sub in map) {
+        //  let sub_rows_db= modelInstance.getRelated(sub)
+        let sub_rows= map[sub]
+        let sub_model =modelInstance[sub]()
+        await sub_model.delete()
+        await sub_model.createMany(sub_rows)
+      }
+  }else{
+      let subTable=  modelInstance.subTable();
+     subTable.forEach(sub => {
+      let sub_rows= modelInstance.$attributes[sub]
+      if(sub_rows){
+        map[sub]=sub_rows
+      }
+      unset(modelInstance.$attributes,sub)
+    });
+    global.request[`sub_table_map_${modelInstance.constructor.table}`]=map;
+  }
 }
 

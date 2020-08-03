@@ -2,6 +2,9 @@
 const Crud=require('./Crud');
 const TextField = require('../crud/field/TextField');
 const SelectField = require('../crud/field/SelectField');
+const Table1ToNField = require('../crud/field/Table1ToNField');
+const MultSelectField = require('../crud/field/MultSelectField');
+const TabField = require('../crud/field/TabField');
 const User=use('App/Models/User')
 class Post extends Crud {
   static boot () {
@@ -29,9 +32,23 @@ class Post extends Crud {
         .check(),
         new SelectField('作者','author').setUIConf(true,false,true,false,false).setDBConf(true,false)
         .setData(authorData)
-        .check()
+        .check(),
+        // new MultSelectField('评论列表','comments').setUIConf(false,true,false,false,false)
+        // .setDBConf(true,false)
+        // .setData(authorData)
+        // .check(),
+        new TabField('评论列表'),
+        new Table1ToNField('评论列表','comments').setUIConf(false,true,false,false,false)
+        .setDBConf(true,false)
+        .hideLabel()
+        // .setOwnTab()
+        // .setData(authorData)
+        .check(),
       ]
       return rs;
+    }
+    subTable(){
+      return ['comments'];
     }
     comments(){
        return  this.hasMany('App/Models/Comment',"id","post_id")//这个写法是对的
