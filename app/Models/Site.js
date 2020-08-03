@@ -5,6 +5,7 @@ const SelectField = require('../crud/field/SelectField');
 const TabField = require('../crud/field/TabField');
 const SwitchField = require('../crud/field/SwitchField');
 const FileField = require('../crud/field/FileField');
+const ImageField = require('../crud/field/ImageField');
 class Site extends Crud {
   static boot () {
     super.boot()
@@ -35,7 +36,7 @@ class Site extends Crud {
       .check(),
      new SwitchField('编辑面板提示','form_confirm').setUIConf(true,true,false,false,false).setDBConf(true,false)
      .check(),
-     new FileField('logo','logo').setUIConf(true,true,false,false,false).setDBConf(true,false)
+     new ImageField('logo','logo').setUIConf(true,true,false,false,false).setDBConf(true,false)
      .check(),
     ]
     return rs;

@@ -1,5 +1,6 @@
 const BaseField= require('./BaseField');
 const Env = use('Env')
+const _ = require('lodash');
 class FileField extends BaseField{
 
   /**
@@ -10,6 +11,7 @@ class FileField extends BaseField{
   constructor(label, field){
     super(label, field)
     this.type="file"
+    this.fileType=null
   }
   /**
    * 取值的钩子
@@ -25,9 +27,18 @@ class FileField extends BaseField{
   onSetVal(row){
     row[this.field]={
       path:row[this.field],
-      url:`${Env.get('APP_URL')}/${row[this.field]}`,
+      url:`${Env.get('APP_URL')}/${_.replace(row[this.field], 'public/', '/')}`,
       name:row[this.field],
     }
   }
+  /**
+   * 设置文件类型
+   * @param {Array<string>} fileType
+   */
+  setFileType(fileType){
+    this.fileType=fileType
+    return this;
+  }
+
 }
 module.exports=FileField;
