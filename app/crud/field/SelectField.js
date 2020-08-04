@@ -1,6 +1,5 @@
 const BaseField= require('./BaseField');
 const { isArray, isFunction } = require('lodash');
-const Page = require('../../Models/Page');
 class SelectField extends BaseField{
   constructor(label, field = null){
     super(label, field)
