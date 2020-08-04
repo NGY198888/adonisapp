@@ -9,4 +9,9 @@ PostHook.addAuthor = async (modelInstance) => {
 PostHook.fethComments=async (modelInstance) => {
   await modelInstance.load('comments');
 }
+PostHook.deleteSubTable=async (modelInstance) => {
+  await modelInstance.load('comments');
+  const comments = modelInstance.getRelated('comments')
+  comments.delete();
+}
 

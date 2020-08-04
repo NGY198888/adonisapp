@@ -215,7 +215,15 @@ class Crud extends Model {
     this.selectFields(query)
     return await query.paginate(page,perPage);
   }
-
+  async deleteAll(ids){
+    if(this.constructor.delete_at){
+      let updateObj={};
+      updateObj[this.constructor.delete_at]= new Date();
+      await this.constructor.query().whereIn(this.constructor.primaryKey, ids).update(updateObj)
+    }else{
+      await this.constructor.query().whereIn(this.constructor.primaryKey, ids).delete()
+    }
+  }
 }
 
 module.exports = Crud

@@ -11,6 +11,7 @@ class Post extends Crud {
     super.boot()
     this.addHook('beforeCreate', 'PostHook.addAuthor')
     this.addHook('afterFind', 'PostHook.fethComments')
+    this.addHook('afterDelete', 'PostHook.deleteSubTable')
   }
     static get rule_msgs(){
         return {

@@ -197,6 +197,12 @@ class CrudController {
         console.log('进入crud view');
         return this.model.view
       }
+      async deleteAll({ params, request, response }){
+        console.log('进入 deleteAll');
+        let ids= request.post()['ids']
+        await (new this.model()).deleteAll(ids)
+        return {message:'success'};
+      }
 
 }
 
