@@ -82,14 +82,7 @@ class CrudController {
             let _model=  this.model;
             let model_instance=new _model();
             let data =await this.getData(request, model_instance,'Add');
-            if(model_instance.rules()){
-              const validation = await validate(request.all(), model_instance.rules(),model_instance.rule_msgs())
-              if (validation.fails()) {
-                  return response.status(422).send({
-                    message:validation.messages()
-                });
-              }
-            }
+            await this.validate(response,request,model_instance);
             model_instance=Object.assign(model_instance,data);
             await model_instance.save();
             return model_instance;
@@ -153,18 +146,23 @@ class CrudController {
         let _model=  this.model;
         const model_instance= await _model.find(params.id);
         let data =await this.getData(request, model_instance,'Edit');
+        await this.validate(response,request,model_instance);
 
-        if(model_instance.rules()){
-          const validation = await validate(request.all(), model_instance.rules(),model_instance.rule_msgs())
-          if (validation.fails()) {
-              return response.status(422).send({
-                message:validation.messages()
-            });
-          }
-        }
         model_instance.merge(data);
         await model_instance.save();
         return model_instance
+      }
+      async validate(response,request,model_instance){
+        let rules=await model_instance.rules()
+        let rule_msgs=await model_instance.rule_msgs()
+          if(rules){
+            const validation = await validate(request.all(), rules,rule_msgs)
+            if (validation.fails()) {
+                return response.status(422).send({
+                  message:validation.messages()
+              });
+            }
+          }
       }
 
       /**
@@ -189,19 +187,41 @@ class CrudController {
        /** 表单显示需要的数据 */
       async form(){
         console.log('进入crud form');
-        return this.model.form()
+        return  new this.model().form()
 
       }
       /**查看显示需要的数据 */
       async view(){
         console.log('进入crud view');
-        return this.model.view
+        return await new this.model().view()
       }
       async deleteAll({ params, request, response }){
         console.log('进入 deleteAll');
         let ids= request.post()['ids']
         await (new this.model()).deleteAll(ids)
         return {message:'success'};
+      }
+      async formView({ params, request, response }){
+        console.log('进入formView');
+        let _model=new this.model();
+        let _form=await _model.form()
+        let rows=await _model.baseQuery().fetch();
+        let row=rows.rows.length>0?rows.rows[0]:{}
+        return {
+          fields:_form.fields,
+          row,
+        }
+      }
+      async formViewSave({ params, request, response }){
+        console.log('进入formViewSave');
+        let _model=new this.model();
+        let rows=await _model.baseQuery().fetch();
+        let row=rows.rows.length>0?rows.rows[0]:new this.model()
+        let data =await this.getData(request, row,'Edit');
+        await this.validate(response,request,row);
+        row.merge(data);
+        await row.save();
+        return  {message:'success'};
       }
 
 }

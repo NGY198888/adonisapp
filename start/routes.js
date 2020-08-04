@@ -65,6 +65,8 @@ Route.group(() => {
 //            }
 //         }
 //     });
+    Route.get('/form/:resource', 'Admin/CrudController.formView')
+    Route.post('/form/save/:resource', 'Admin/CrudController.formViewSave')
     Route.post(':resource/deleteAll', 'Admin/CrudController.deleteAll')
     Route.get(':resource/grid:id?', 'Admin/CrudController.grid')
     Route.get(':resource/form:id?', 'Admin/CrudController.form')

@@ -1,0 +1,559 @@
+{
+  "modules": [
+    {
+      "name": "sys",
+      "chnname": "系统",
+      "entities": [
+        {
+          "title": "users",
+          "fields": [
+            {
+              "name": "id",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "表ID",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "username",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "用户名"
+            },
+            {
+              "name": "password",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "密码"
+            },
+            {
+              "name": "email",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "email"
+            },
+            {
+              "name": "created_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "updated_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "用户"
+        },
+        {
+          "title": "pages",
+          "fields": [
+            {
+              "name": "id",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "表ID",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "name",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "名称"
+            },
+            {
+              "name": "url",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "地址"
+            },
+            {
+              "name": "icon",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "图标"
+            },
+            {
+              "name": "isMenu",
+              "type": "YesNo",
+              "remark": "",
+              "chnname": "是否菜单"
+            },
+            {
+              "name": "updated_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "created_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "pid",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "父菜单"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "页面"
+        },
+        {
+          "title": "site",
+          "fields": [
+            {
+              "name": "id",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "表ID",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "name",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "名称"
+            },
+            {
+              "name": "des",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "描述"
+            },
+            {
+              "name": "open_side_bar",
+              "type": "YesNo",
+              "remark": "",
+              "chnname": "展开侧边栏"
+            },
+            {
+              "name": "logo",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "logo地址"
+            },
+            {
+              "name": "lang",
+              "type": "DefaultString",
+              "remark": "",
+              "chnname": "语言"
+            },
+            {
+              "name": "theme",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "主题"
+            },
+            {
+              "name": "form_confirm",
+              "type": "YesNo",
+              "remark": "关闭编辑面板时，如果有数据变动，会弹出提示",
+              "chnname": "编辑面板提示"
+            },
+            {
+              "name": "created_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "updated_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "网站配置"
+        }
+      ],
+      "graphCanvas": {
+        "nodes": [
+          {
+            "shape": "table",
+            "title": "users",
+            "moduleName": false,
+            "x": 181.796875,
+            "y": 132,
+            "id": "ffd7afc8"
+          },
+          {
+            "shape": "table",
+            "title": "pages",
+            "moduleName": false,
+            "x": 468.796875,
+            "y": 140,
+            "id": "11b20b65"
+          }
+        ],
+        "edges": []
+      },
+      "associations": []
+    },
+    {
+      "name": "blog",
+      "chnname": "博客",
+      "entities": [
+        {
+          "title": "posts",
+          "fields": [
+            {
+              "name": "id",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "表ID",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "title",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "标题"
+            },
+            {
+              "name": "content",
+              "type": "LongText",
+              "remark": "",
+              "chnname": "内容"
+            },
+            {
+              "name": "author",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "作者"
+            },
+            {
+              "name": "updated_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "created_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "帖子"
+        },
+        {
+          "title": "comments",
+          "fields": [
+            {
+              "name": "id",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "表ID",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "user_id",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "评论人"
+            },
+            {
+              "name": "post_id",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "帖子ID"
+            },
+            {
+              "name": "content",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "评论内容"
+            },
+            {
+              "name": "title",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "评论标题"
+            },
+            {
+              "name": "updated_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            },
+            {
+              "name": "created_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "评论"
+        }
+      ],
+      "graphCanvas": {
+        "nodes": [
+          {
+            "shape": "table",
+            "title": "posts",
+            "moduleName": false,
+            "x": 194.796875,
+            "y": 143,
+            "id": "bc4fb7f8"
+          }
+        ],
+        "edges": []
+      },
+      "associations": []
+    }
+  ],
+  "message": "添加网站配置表",
+  "version": "v1.0.9",
+  "changes": [
+    {
+      "type": "entity",
+      "name": "site",
+      "opt": "add"
+    }
+  ],
+  "date": "2020/8/5 0:4:27"
+}

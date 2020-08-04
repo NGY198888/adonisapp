@@ -33,8 +33,28 @@ class Crud extends Model {
    subTable(){
      return [];
    }
-    rule_msgs(){
-       return {};
+   validMap(){
+    const obj= {
+       'required':'未填写',
+       'email':'必须是邮箱格式',
+       'integer':'必须是整数',
+       'range':'范围不对',
+     };
+     return obj;
+   }
+   async rule_msgs(){
+       let _fields=await this.fields()
+       let fields= this._fields2ObjArr(_fields,"validator")
+       let rs={};
+       fields.forEach(field => {
+          if(field.validator){
+           let  validators=field.validator.split('|')
+           validators.forEach(valid => {
+            rs[`${field.field}.${valid}`]=`${field.label}${this.validMap()[valid]}`
+           });
+          }
+       });
+       return rs;
    }
    //需要保存到数据库的字段
    async  saveFields(){
@@ -85,7 +105,8 @@ class Crud extends Model {
        ;
    }
    async form(){
-        let fields = this._fields2ObjArr(this.fields,"form");
+       const _fields= await this.fields()
+        let fields = this._fields2ObjArr(_fields,"form");
         return {
             fields,
         };
