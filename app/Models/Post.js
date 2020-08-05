@@ -39,7 +39,7 @@ class Post extends Crud {
         // .setData(authorData)
         // .check(),
         new TabField('评论列表'),
-        new Table1ToNField('评论列表','comments').setUIConf(false,true,false,false,false)
+        new Table1ToNField('评论列表','comments').setUIConf(false,true,true,false,false)
         .setDBConf(true,false)
         .hideLabel()
         // .setOwnTab()

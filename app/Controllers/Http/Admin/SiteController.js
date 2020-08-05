@@ -1,92 +1,10 @@
 'use strict'
 
-/** @typedef {import('@adonisjs/framework/src/Request')} Request */
-/** @typedef {import('@adonisjs/framework/src/Response')} Response */
-/** @typedef {import('@adonisjs/framework/src/View')} View */
+const CrudController = require('./CrudController');
+class SiteController extends CrudController {
 
-/**
- * Resourceful controller for interacting with sites
- */
-class SiteController {
-  /**
-   * Show a list of all sites.
-   * GET sites
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async index ({ request, response, view }) {
-  }
-
-  /**
-   * Render a form to be used for creating a new site.
-   * GET sites/create
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async create ({ request, response, view }) {
-  }
-
-  /**
-   * Create/save a new site.
-   * POST sites
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
-  }
-
-  /**
-   * Display a single site.
-   * GET sites/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
-  }
-
-  /**
-   * Render a form to update an existing site.
-   * GET sites/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
-
-  /**
-   * Update site details.
-   * PUT or PATCH sites/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update ({ params, request, response }) {
-  }
-
-  /**
-   * Delete a site with id.
-   * DELETE sites/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
+  get resource(){
+     return 'site'
   }
   async site(){
         return {
@@ -180,82 +98,82 @@ class SiteController {
                   }
             ]
         }
-    }
-   async  home(){
-        return {
-            title:"博客管理后台",
-            description:'网站描述',
-            button: {
-                icon: "icon-people",
-                variant: "primary",
-                text: "用户管理",
-                to: "/rest/users"
-            },
-            statics: [
-                {
-                bg: "info",
-                icon: "icon-speedometer",
-                value: 5000 + parseInt(Math.random() * 5000),
-                title: "Comments",
-                progress: 78
-                },
-                {
-                bg: "success",
-                icon: "icon-people",
-                value: 10000 + parseInt(Math.random() * 10000),
-                title: "Users",
-                progress: 60
-                },
-                {
-                bg: "warning",
-                icon: "icon-basket-loaded",
-                value: 100000 + parseInt(Math.random() * 30000),
-                title: "Sales",
-                progress: 92
-                },
-                {
-                bg: "primary",
-                icon: "icon-camrecorder",
-                value: 300 + parseInt(Math.random() * 300),
-                title: "Videos",
-                progress: 67
-                }
-            ],
-            html: `<div>基于 based on vue 2 and bootstrap 4 </div>
-            <div class="font-weight-bold">html内容...</div>
-            `
-        };
-     }
-    async settings({request,response}){
-        const settingForm = {
-            title: "系统设置",
-            fields: {
-              name: { label: "系统名称", input_cols: 4},
-              logo: { label: "系统Logo", type: "image", input_cols: 4 },
-              theme_switcher:  { label: "主题切换",type: "switch", input_cols: 1},
-              menu: {
-                type: "array",
-                is_table: true,
-                fields: {
-                  name: {},
-                  _actions: {}
-                }
+  }
+  async  home(){
+      return {
+          title:"博客管理后台",
+          description:'网站描述',
+          button: {
+              icon: "icon-people",
+              variant: "primary",
+              text: "用户管理",
+              to: "/rest/users"
+          },
+          statics: [
+              {
+              bg: "info",
+              icon: "icon-speedometer",
+              value: 5000 + parseInt(Math.random() * 5000),
+              title: "Comments",
+              progress: 78
+              },
+              {
+              bg: "success",
+              icon: "icon-people",
+              value: 10000 + parseInt(Math.random() * 10000),
+              title: "Users",
+              progress: 60
+              },
+              {
+              bg: "warning",
+              icon: "icon-basket-loaded",
+              value: 100000 + parseInt(Math.random() * 30000),
+              title: "Sales",
+              progress: 92
+              },
+              {
+              bg: "primary",
+              icon: "icon-camrecorder",
+              value: 300 + parseInt(Math.random() * 300),
+              title: "Videos",
+              progress: 67
               }
-            },
-            value: {
-              name: "REST ADMIN",
-              menu: [],
-              theme_switcher:true,
+          ],
+          html: `<div>基于 based on vue 2 and bootstrap 4 </div>
+          <div class="font-weight-bold">html内容...</div>
+          `
+      };
+  }
+  async settings({request,response}){
+      const settingForm = {
+          title: "系统设置",
+          fields: {
+            name: { label: "系统名称", input_cols: 4},
+            logo: { label: "系统Logo", type: "image", input_cols: 4 },
+            theme_switcher:  { label: "主题切换",type: "switch", input_cols: 1},
+            menu: {
+              type: "array",
+              is_table: true,
+              fields: {
+                name: {},
+                _actions: {}
+              }
             }
+          },
+          value: {
+            name: "REST ADMIN",
+            menu: [],
+            theme_switcher:true,
           }
-          return settingForm;
-    }
-    async save_settings({request,response}){
-        let model = request.body;
-        console.log(model);
+        }
+        return settingForm;
+  }
+  async save_settings({request,response}){
+      let model = request.body;
+      console.log(model);
 
-        response.send(model);
-    }
+      response.send(model);
+  }
 }
 
 module.exports = SiteController

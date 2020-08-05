@@ -1,5 +1,8 @@
 'use strict'
 var inflection = require( 'inflection' );
+/** @typedef {import('@adonisjs/framework/src/Request')} Request */
+/** @typedef {import('@adonisjs/framework/src/Response')} Response */
+/** @typedef {import('@adonisjs/framework/src/View')} View */
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Validator')} */
 const {validate}=use('Validator')
 const _lodash = require('lodash');
@@ -20,7 +23,7 @@ class CrudController {
         return resource
     }
     get model(){
-      let _resource =this.resource
+      let _resource =inflection.classify(this.resource)
       try {
         const model = use('App/Models/' +_resource)
         return model
