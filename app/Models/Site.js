@@ -4,6 +4,7 @@ const TextField = require('../crud/field/TextField');
 const SelectField = require('../crud/field/SelectField');
 const TabField = require('../crud/field/TabField');
 const SwitchField = require('../crud/field/SwitchField');
+const FileField = require('../crud/field/FileField');
 class Site extends Crud {
   static boot () {
     super.boot()
@@ -20,6 +21,22 @@ class Site extends Crud {
       .check(),
       new SwitchField('展开侧边栏','open_side_bar').setUIConf(true,true,false,false,false).setDBConf(true,false)
       .check(),
+      new SelectField('语言','lang').setUIConf(true,true,false,false,false).setDBConf(true,false)
+      .setData([
+        {
+          id:'zh',
+          txt:'中文'
+        },
+        {
+          id:'en',
+          txt:'en'
+        }
+      ])
+      .check(),
+     new SwitchField('编辑面板提示','form_confirm').setUIConf(true,true,false,false,false).setDBConf(true,false)
+     .check(),
+     new FileField('logo','logo').setUIConf(true,true,false,false,false).setDBConf(true,false)
+     .check(),
     ]
     return rs;
   }

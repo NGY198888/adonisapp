@@ -24,7 +24,6 @@ const Helpers = use('Helpers')
 Route.get('/api/blog','BlogController.index')
 Route.post('admin/api/reg','UserController.reg')
 Route.post('admin/api/login','UserController.login')
-
 let crud_list=['users','posts','site'];
 Route.group(() => {
     Route.post('/upload','FileUploadController.upload')

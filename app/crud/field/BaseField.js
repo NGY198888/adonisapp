@@ -163,5 +163,19 @@ class BaseField {
     this.show_label=false;
     return this;
   }
+  /**
+   * 取值的钩子
+   * @param {*} data
+   */
+  onGetVal(data){
+
+  }
+  /**
+   * 设置值的钩子
+   * @param {*} row
+   */
+  onSetVal(row){
+
+  }
 }
 module.exports=BaseField;

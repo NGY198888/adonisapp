@@ -104,6 +104,12 @@ class CrudController {
         }, _obj);
         data = _lodash.merge(_obj, data);
       }
+      let _fields=  await model_instance.fields()
+      let formFields = model_instance._fields2ObjArr(_fields,"form");
+      formFields.forEach(formField => {
+        if(Object.prototype.hasOwnProperty.call(data, formField.field))
+          formField.onGetVal(data)
+      });
       return data;
     }
 
@@ -118,7 +124,13 @@ class CrudController {
        */
       async show ({ params, request, response, view }) {
         if(params.id){
-          const model_instance= await this.model.find(params.id);
+          let model_instance= await this.model.find(params.id);
+          model_instance=model_instance .toJSON()
+          _form.fields.forEach(field => {
+            if(Object.prototype.hasOwnProperty.call(model_instance, field.field)){
+              field.onSetVal(model_instance)
+            }
+          });
           return model_instance
         }else{
           throw new Error('缺少资源id信息');
@@ -209,7 +221,12 @@ class CrudController {
         let _model=new this.model();
         let _form=await _model.form()
         let rows=await _model.baseQuery().fetch();
-        let row=rows.rows.length>0?rows.rows[0]:{}
+        let row=rows.rows.length>0?rows.rows[0].toJSON():{}
+        _form.fields.forEach(field => {
+          if(Object.prototype.hasOwnProperty.call(row, field.field)){
+            field.onSetVal(row)
+          }
+        });
         return {
           fields:_form.fields,
           row,
