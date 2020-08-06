@@ -18,9 +18,10 @@ const Route = use('Route')
 var inflection = require( 'inflection' );
 const fs=require('fs')
 const path = require('path')
-const { resolver, ioc } = require('@adonisjs/fold')
+const { resolver, ioc } = require('@adonisjs/fold');
+const { isFunction, startsWith } = require('lodash');
 const Helpers = use('Helpers')
-// Route.get('/','Admin/SiteController.site')
+// Route.get('/','Admin/UserController.aa1')
 Route.get('/api/blog','BlogController.index')
 Route.post('admin/api/reg','UserController.reg')
 Route.post('admin/api/login','UserController.login')
@@ -35,41 +36,49 @@ Route.group(() => {
     Route.get('/posts/form:id?', 'Admin/PostController.form')
     Route.get('/posts/view:id?', 'Admin/PostController.view')
     Route.resource('/posts', 'Admin/PostController')
-    for (let index = 0; index < crud_list.length; index++) {
-        //优先匹配这里
-        const resource = crud_list[index];
-        const className= inflection.classify(resource);
-        Route.get(`/form/${resource}`, `Admin/${className}Controller.formView`)
-        Route.post(`/form/save/${resource}`, `Admin/${className}Controller.formViewSave`)
-        Route.post(`/${resource}/deleteAll`, `Admin/${className}Controller.deleteAll`)
-        Route.get(`/${resource}/grid:id?`, `Admin/${className}Controller.grid`)
-        Route.get(`/${resource}/form:id?`, `Admin/${className}Controller.form`)
-        Route.get(`/${resource}/view:id?`, `Admin/${className}Controller.view`)
-        Route.resource(`/${resource}`, `Admin/${className}Controller`)
+    // for (let index = 0; index < crud_list.length; index++) {
+    //     //优先匹配这里
+    //     const resource = crud_list[index];
+    //     const className= inflection.classify(resource);
+    //     Route.get(`/form/${resource}`, `Admin/${className}Controller.formView`)
+    //     Route.post(`/form/save/${resource}`, `Admin/${className}Controller.formViewSave`)
+    //     Route.post(`/${resource}/deleteAll`, `Admin/${className}Controller.deleteAll`)
+    //     Route.get(`/${resource}/grid:id?`, `Admin/${className}Controller.grid`)
+    //     Route.get(`/${resource}/form:id?`, `Admin/${className}Controller.form`)
+    //     Route.get(`/${resource}/view:id?`, `Admin/${className}Controller.view`)
+    //     Route.resource(`/${resource}`, `Admin/${className}Controller`)
+    // }
+   let pathName=path.join(Helpers.appRoot(),'/App/Controllers/Http/Admin')
+   let files=  fs.readdirSync(pathName);
+    for (var i=0; i<files.length; i++)
+    {
+       let fileName= files[i]
+       let controller=fileName.replace('.js','')
+       let clazz=use(`App/Controllers/Http/Admin/${controller}`)
+       let instance=new clazz();
+       let isCrud=false
+       try {isCrud= instance.isCrud } catch (error) {}
+       let resource=inflection.pluralize(fileName.replace('Controller.js','')).toLowerCase()
+       if(isCrud&&resource!=="cruds"){
+            console.log("注册crud路由",resource);
+           for (const key in instance) {
+            if(isFunction(instance[key])&&!startsWith(key, '_')){
+              console.log("注册custom路由 "+`/custom/${resource}/${key}`);
+              Route.post(`/custom/${resource}/${key}`, `Admin/${controller}.${key}`)
+            }
+           }
+            Route.get(`/form/${resource}`, `Admin/${controller}.formView`)
+            Route.post(`/form/save/${resource}`, `Admin/${controller}.formViewSave`)
+            Route.post(`/${resource}/deleteAll`, `Admin/${controller}.deleteAll`)
+            Route.get(`/${resource}/grid:id?`, `Admin/${controller}.grid`)
+            Route.get(`/${resource}/form:id?`, `Admin/${controller}.form`)
+            Route.get(`/${resource}/view:id?`, `Admin/${controller}.view`)
+            Route.resource(`/${resource}`, `Admin/${controller}`)
+       }
     }
-  //  let pathName=path.join(Helpers.appRoot(),'/App/Controllers/Http/Admin')
-  //  fs.readdir(pathName, function(err, files){
-  //       for (var i=0; i<files.length; i++)
-  //       {
-  //          let fileName= files[i]
-  //          let controller=fileName.replace('.js','')
-  //          let clazz=use(`App/Controllers/Http/Admin/${controller}`)
-  //          let instance=new clazz();
-  //          let isCrud=false
-  //          try {isCrud= instance.isCrud } catch (error) {}
-  //          let resource=inflection.pluralize(fileName.replace('Controller.js','')).toLowerCase()
-  //          if(isCrud&&resource!=="cruds"){
-  //               console.log("注册crud路由",resource);
-  //               Route.get(`/form/${resource}`, `Admin/${controller}.formView`)
-  //               Route.post(`/form/save/${resource}`, `Admin/${controller}.formViewSave`)
-  //               Route.post(`/${resource}/deleteAll`, `Admin/${controller}.deleteAll`)
-  //               Route.get(`/${resource}/grid:id?`, `Admin/${controller}.grid`)
-  //               Route.get(`/${resource}/form:id?`, `Admin/${controller}.form`)
-  //               Route.get(`/${resource}/view:id?`, `Admin/${controller}.view`)
-  //               Route.resource(`/${resource}`, `Admin/${controller}`)
-  //          }
-  //       }
-  //   });
+
+
+
     Route.get('/form/:resource', 'Admin/CrudController.formView')
     Route.post('/form/save/:resource', 'Admin/CrudController.formViewSave')
     Route.post(':resource/deleteAll', 'Admin/CrudController.deleteAll')

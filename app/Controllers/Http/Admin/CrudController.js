@@ -8,6 +8,29 @@ const {validate}=use('Validator')
 const _lodash = require('lodash');
 const { unset } = require('lodash');
 class CrudController {
+    // //_开头作为私有方法的写法约定，此类不做为自动路由
+    // _privateFun=()=>{}
+    // //可以做自动路由
+    // routeFun1= async ()=>{
+    //   //可以正常获取this,可以被继承
+    //  return new this.model().form()
+    // }
+    // //可以做自动路由
+    // routeFun2=async function(){
+    //    //可以正常获取this ,可以被继承
+    //   return new this.model().form()
+    // }
+    // //这种写法在for in 获取不到，相当于被保护的方法，不做为自动路由
+    // cannotRouteFun(){ }
+
+    // 自定义接口测试 model里加如下按钮配置进行匹配
+    // new BaseBtn('测试',BtnPosition.Table,null,ActionType.API).setUrl(null,null,'test').check()
+    // test=async({request, response })=>{
+    //     let {row,id,ids,where}=  request.all();
+    //     console.log(row,id,ids,where);
+    //     let rs=  await new this.model().baseQuery().fetch()
+    //     return rs
+    // }
     get isCrud(){
        return true;
     }

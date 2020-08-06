@@ -3,6 +3,11 @@
 const Crud=require('./Crud');
 const TextField = require('../crud/field/TextField');
 const DateField = require('../crud/field/DateField');
+const GridConf = require('../crud/conf/GridConf');
+const BaseField = require('../crud/field/BaseField');
+const BaseBtn = require('../crud/btn/BaseBtn');
+const BtnPosition = require('../crud/btn/BtnPosition');
+const ActionType = require('../crud/btn/ActionType');
 class User extends Crud {
   static boot () {
     super.boot()
@@ -31,7 +36,19 @@ class User extends Crud {
           new DateField('创建时间','created_at').setUIConf(true,false,true,false,false).setDBConf(true,false).check(),
         ]
   }
-
+  /**
+    * 自定义gird配置
+    * @param {GridConf} gridConf
+    * @param {Array<BaseField>} fields
+    * @param {Array<BaseField>} formFields
+    * @param {Array<BaseField>} viewFields
+    * @param {Array<BaseField>} searchFields
+    */
+  async onGridConf(gridConf,fields,formFields,viewFields,searchFields){
+    gridConf.addBtn(
+      new BaseBtn('测试',BtnPosition.Table,null,ActionType.API).setUrl(null,null,'test').check()
+    )
+  }
 
   /**
    * A relationship on tokens is required for auth to

@@ -9,7 +9,6 @@ const Hash = use('Hash')
 const CrudController = require("./CrudController")
 
 class UserController  extends CrudController{
-
   get resource(){
     return 'users'
   }
@@ -31,6 +30,14 @@ class UserController  extends CrudController{
     await row.save();
     return  {message:'success'};
   }
+  //这是一个自定义按钮的提交接口
+  test=async({request, response })=>{
+       let {row,id,ids,where}=  request.all();
+       console.log(row,id,ids,where);
+      let rs=  await new this.model().baseQuery().fetch()
+      return rs
+  }
+
 
 }
 

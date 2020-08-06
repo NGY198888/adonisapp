@@ -5,6 +5,7 @@ const { ModelException } = require('@adonisjs/lucid/src/Exceptions');
 const _lodash = require('lodash');
 const GridConf = require('../crud/conf/GridConf');
 const BaseBtn = require('../crud/btn/BaseBtn');
+const BaseField = require('../crud/field/BaseField');
 // /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
 // const ErrCode=require('../ErrCode')
@@ -92,17 +93,37 @@ class Crud extends Model {
         searchFields.forEach(_field => {
           _field.val=_field.searchVal||null;
         });
-      //  const searchableFields= _lodash.filter(_fields, (_field)=>{
-      //     return !!_field.searchable
-      //  });
-      //  searchableFields.forEach(_field => {
-      //      _field.val=_field.searchVal||null;
-      //  });
-       return new GridConf(this.table,'id')
-       .setFields(fields,formFields,viewFields,searchFields)
-       .setPagination(true)
-       .addCrudBtn(true)
-       ;
+       let gridConf= new GridConf(this.table,'id')
+       .setFields(fields,formFields,viewFields,searchFields);
+       await this.onPagination(gridConf);
+       await this.onAddCrudBtn(gridConf);
+       await this.onGridConf(gridConf,fields,formFields,viewFields,searchFields);
+       return gridConf;
+   }
+   /**
+    * 自定义gird配置
+    * @param {GridConf} gridConf
+    * @param {Array<BaseField>} fields
+    * @param {Array<BaseField>} formFields
+    * @param {Array<BaseField>} viewFields
+    * @param {Array<BaseField>} searchFields
+    */
+   async onGridConf(gridConf,fields,formFields,viewFields,searchFields){
+
+   }
+   /**
+    * 设置分页
+    * @param {GridConf} gridConf
+    */
+  async onPagination(gridConf){
+     gridConf.setPagination(true)
+   }
+   /**
+    * 添加默认按钮
+    * @param {GridConf} gridConf
+    */
+  async onAddCrudBtn(gridConf){
+    gridConf.addCrudBtn(true)
    }
    async form(){
        const _fields= await this.fields()
