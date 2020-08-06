@@ -126,6 +126,7 @@ class CrudController {
         if(params.id){
           let model_instance= await this.model.find(params.id);
           model_instance=model_instance .toJSON()
+          let _form=await new this.model().form()
           _form.fields.forEach(field => {
             if(Object.prototype.hasOwnProperty.call(model_instance, field.field)){
               field.onSetVal(model_instance)

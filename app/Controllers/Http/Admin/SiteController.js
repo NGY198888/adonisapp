@@ -39,7 +39,7 @@ class SiteController extends CrudController {
                 },
                 {
                     name: "内容",
-                    url:'/rest/posts2',
+                    url:"",
                     icon:'el-icon-circle-plus-outline',
                     title: true,
                     children:[
