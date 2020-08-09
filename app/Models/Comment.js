@@ -2,6 +2,10 @@
 const Crud=require('./Crud');
 const TextField = require('../crud/field/TextField');
 const SelectField = require('../crud/field/SelectField');
+const BaseBtn = require('../crud/btn/BaseBtn');
+const BtnPosition = require('../crud/btn/BtnPosition');
+const ActionType = require('../crud/btn/ActionType');
+const GridConf = require('../crud/conf/GridConf');
 const User=use('App/Models/User')
 class Comment extends Crud {
   static boot () {
@@ -33,6 +37,19 @@ class Comment extends Crud {
     }
     post(){
       return  this.belongsTo('App/Models/Post','post_id','id')
+    }
+     /**
+    * 自定义gird配置
+    * @param {GridConf} gridConf
+    * @param {Array<BaseField>} fields
+    * @param {Array<BaseField>} formFields
+    * @param {Array<BaseField>} viewFields
+    * @param {Array<BaseField>} searchFields
+    */
+    async onGridConf(gridConf,fields,formFields,viewFields,searchFields){
+      gridConf.addBtn(
+        new BaseBtn('非常规方法',BtnPosition.Table,null,ActionType.API).setUrl(null,null,'test').check()
+      )
     }
 }
 module.exports = Comment

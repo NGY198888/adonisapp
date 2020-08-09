@@ -91,7 +91,7 @@ class Page extends Crud {
     * @param {Array<BaseField>} searchFields
     */
    async onGridConf(gridConf,fields,formFields,viewFields,searchFields){
-      gridConf.setTreeGrid('pid')
+    gridConf.setTreeGrid('pid')
       // console.log(gridConf);
    }
    afterQuery(rows){

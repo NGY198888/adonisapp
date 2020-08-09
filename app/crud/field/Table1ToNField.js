@@ -9,7 +9,8 @@ class Table1ToNField extends BaseField{
     super(label, field)
     this.type="table_1_to_n"
     this.resource=field;
-    this.height=300;
+    this.height=390;
+    this.val=[];
   }
   parseQuery(query,_model) {
     return this
