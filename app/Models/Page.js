@@ -71,7 +71,7 @@ class Page extends Crud {
     tableAlias(){
       return 'p1';
     }
-    // selectForm(query){
+    // selectFrom(query){
     //   query.from(this.constructor.table)
     // }
     selectFields(query){

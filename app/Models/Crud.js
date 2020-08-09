@@ -160,22 +160,32 @@ class Crud extends Model {
    static get delete_at(){
        return null;
    }
+   /**表别名 */
    tableAlias(){
        return 'tableAlias';
    }
+   /**获取表查询对象 */
    baseQuery(){
     let query = this.constructor.query()
      if(this.constructor.delete_at){
         query.whereNull(this.constructor.delete_at)
      }
-    this.selectForm(query)
+    this.selectFrom(query)
     return query;
    }
-   selectForm(query){
+   /**
+    * 查询哪个表可自定义
+    * @param {*} query
+    */
+   selectFrom(query){
      let obj={}
      obj[this.tableAlias()]=this.constructor.table
      query.from(obj)
    }
+   /**
+    * 查询字段可自定义
+    * @param {*} query
+    */
    selectFields(query){
       query.select(`${this.tableAlias()}.*`)
    }
@@ -224,6 +234,10 @@ class Crud extends Model {
       }
 
   }
+  /**
+   * 获取查询对象后的回调
+   * @param {*} query
+   */
   async onQuery(query){
     //此处一般用来连表，之后可能需要重新 selectFields   select 要在Join语句后面
     //query.leftJoin({'p2':'pages'}, 'p2.id', 'p1.pid')
@@ -260,12 +274,25 @@ class Crud extends Model {
     this.afterQuery(rows)
     return rows
   }
+  /**
+   * 查询前的回调
+   * @param {*} query 查询对象
+   * @param {*} queryData 页面条件
+   */
   beforeQuery(query,queryData){
 
   }
+  /**
+   * 查询后回调
+   * @param {*} rows
+   */
   afterQuery(rows){
 
   }
+  /**
+   * 批量删除
+   * @param {*} ids
+   */
   async deleteAll(ids){
     if(this.constructor.delete_at){
       let updateObj={};

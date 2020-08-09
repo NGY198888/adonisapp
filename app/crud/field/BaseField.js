@@ -2,9 +2,9 @@ const { isNull, isArray, isObject } = require("lodash");
 const ColumnTpl = require("./ColumnTpl");
 class BaseField {
   /**
-   * 按钮
+   * 字段基类
    * @param {String} label 字段标签名
-   * @param {String} field 字段的属性名
+   * @param {String} field 字段的属性字段
    */
     constructor(label, field = null) {
         this.isUI = false;
@@ -164,6 +164,10 @@ class BaseField {
     this.show_label=false;
     return this;
   }
+  /**
+   * 设置列的属性
+   * @param {number} width 列宽
+   */
   setColumn(width){
       this.width=width;
       return this;
