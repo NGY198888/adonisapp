@@ -37,7 +37,7 @@ class Page extends Crud {
           .setColumn(140)
           .check(),
           new TabField('测试面板2'),
-          new TextField('页面地址','url').setUIConf(true,true,true,true,true).setDBConf(true,true,'required').check(),
+          new TextField('页面地址','url').setUIConf(true,true,true,true,true).setDBConf(true,false).check(),
           new IconField('图标','icon').setUIConf(true,true,true,true,true).setDBConf(true,false).check(),
           new SwitchField('是否菜单','isMenu').setUIConf(true,true,true,false,false)
           .setDBConf(true,false)

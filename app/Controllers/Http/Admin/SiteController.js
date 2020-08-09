@@ -1,13 +1,14 @@
 'use strict'
 
 const CrudController = require('./CrudController');
+const Page = require('../../../Models/Page');
 class SiteController extends CrudController {
 
   get resource(){
      return 'site'
   }
   async site(){
-        return {
+       let rs= {
             name:'我的博客',
             logo: "http://www.baidu.com/img/flexible/logo/pc/result.png",
             locale_switcher: true,
@@ -98,6 +99,9 @@ class SiteController extends CrudController {
                   }
             ]
         }
+       let rows =await new Page().baseQuery().fetch();
+        rs.menu=rows.toJSON();
+        return rs;
   }
   async  home(){
       return {
