@@ -7,6 +7,7 @@ const SelectField = require('../crud/field/SelectField');
 const ColumnTpl = require('../crud/field/ColumnTpl');
 const TabField = require('../crud/field/TabField');
 const IconField = require('../crud/field/IconField');
+const GridConf = require('../crud/conf/GridConf');
 
 class Page extends Crud {
     static boot () {
@@ -30,7 +31,11 @@ class Page extends Crud {
 
         let rs= [
           new TextField('_id','id').setUIConf(false,false,false,false,false).setDBConf(true,false).check(),
-          new TextField('页面名称','name').setUIConf(true,true,true,true,true).setDBConf(true,true,'required').check(),
+          new TextField('页面名称','name')
+          .setUIConf(true,true,true,true,false)
+          .setDBConf(true,true,'required')
+          .setColumn(140)
+          .check(),
           new TabField('测试面板2'),
           new TextField('页面地址','url').setUIConf(true,true,true,true,true).setDBConf(true,true,'required').check(),
           new IconField('图标','icon').setUIConf(true,true,true,true,true).setDBConf(true,false).check(),
@@ -46,7 +51,7 @@ class Page extends Crud {
             'null':'否'
           })
           .check(),
-          new SelectField('父级菜单','pid').setUIConf(true,true,false,false,false).setDBConf(true,false)
+          new SelectField('父级菜单','pid').setUIConf(false,true,false,false,false).setDBConf(true,false)
           .setData(pidData)
           .check()
         ]
@@ -77,6 +82,21 @@ class Page extends Crud {
     page(){
        return this.belongsTo('App/Models/Page','pid','id')
     }
+     /**
+    * 自定义gird配置
+    * @param {GridConf} gridConf
+    * @param {Array<BaseField>} fields
+    * @param {Array<BaseField>} formFields
+    * @param {Array<BaseField>} viewFields
+    * @param {Array<BaseField>} searchFields
+    */
+   async onGridConf(gridConf,fields,formFields,viewFields,searchFields){
+      gridConf.setTreeGrid('pid')
+      // console.log(gridConf);
+   }
+   afterQuery(rows){
+
+   }
 
 }
 

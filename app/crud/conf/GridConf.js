@@ -14,20 +14,28 @@ class GridConf {
    * @param {boolean} multSelect 是否支持多选
    */
   constructor(table,key='id',sortStr=null,multSelect=false){
-    this.table=table
-    this.key=key
-    this.sortStr=sortStr
-    this.multSelect=multSelect
-    this.tableSearchFields=[]
-    this.tableFields=[]
-    this.formFields=[]
-    this.viewFields=[]
+    this.table=table//表
+    this.key=key//主键
+    this.sortStr=sortStr//排序
+    this.multSelect=multSelect//多选
+    this.tableSearchFields=[]//搜索字段
+    this.tableFields=[]//列表字段
+    this.formFields=[]//新增，编辑字段
+    this.viewFields=[]//显示字段
     this.buttons=[]
+    // 分页配置
     this.pagination=true//是否分页，目前不支持不分页
     this.page=1
     this.total=0
     this.pageSize=20
     this.pageSizes=[20,40,100,500,100000]
+    //汇总配置
+    this.showSummary=false
+    this.summaryFrom="local"
+
+    //树形表格配置
+    this.pidField=null
+    this.lazy=false
   }
   /**
    * 分页配置
@@ -102,6 +110,31 @@ class GridConf {
   addXlsBtn(){
     this.addBtn(new BaseBtn('导入',BtnPosition.Table,BtnAction.Import,ActionType.FORM))
         .addBtn(new BaseBtn('导出',BtnPosition.Table,BtnAction.Export,ActionType.API))
+    return this;
+  }
+ /**
+  * 表尾合计
+  * @param {*} showSummary
+  * @param {['local','remote']} summaryFrom 合计数据源 local只会合计本地数据 remote则是由后台接口返回
+  */
+  setSummary(showSummary=true,summaryFrom='local'){
+    this.showSummary=showSummary;
+    this.summaryFrom=summaryFrom;
+    return this;
+  }
+  /**
+   * 设置树形表格
+   * @param {string} pidField 父ID字段
+   * @param {string} idField   ID 默认是表的主键
+   * @param {Boolean} lazy 是否懒加载
+   */
+  setTreeGrid(pidField,idField=this.key,lazy=false){
+    this.pidField=pidField
+    this.key=idField
+    this.lazy=lazy
+    if(this.pidField){//树形表格不打算分页
+       this.setPagination(false,10000)
+    }
     return this;
   }
 }

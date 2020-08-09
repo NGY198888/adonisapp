@@ -34,6 +34,7 @@ class BaseField {
         // }
 
         this.data=[];
+        this.width=null
     }
     /**
      * UI配置
@@ -162,6 +163,10 @@ class BaseField {
   hideLabel(){
     this.show_label=false;
     return this;
+  }
+  setColumn(width){
+      this.width=width;
+      return this;
   }
   /**
    * 取值的钩子

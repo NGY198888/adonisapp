@@ -93,7 +93,7 @@ class Crud extends Model {
         searchFields.forEach(_field => {
           _field.val=_field.searchVal||null;
         });
-       let gridConf= new GridConf(this.table,'id')
+       let gridConf= new GridConf(this.constructor.table,this.constructor.primaryKey)
        .setFields(fields,formFields,viewFields,searchFields);
        await this.onPagination(gridConf);
        await this.onAddCrudBtn(gridConf);
@@ -255,7 +255,16 @@ class Crud extends Model {
     });
     sort&&(query.orderBy(...sort.split(' ')))
     this.selectFields(query)
-    return await query.paginate(page,perPage);
+    this.beforeQuery(query,queryData)
+    let rows= await query.paginate(page,perPage);
+    this.afterQuery(rows)
+    return rows
+  }
+  beforeQuery(query,queryData){
+
+  }
+  afterQuery(rows){
+
   }
   async deleteAll(ids){
     if(this.constructor.delete_at){
