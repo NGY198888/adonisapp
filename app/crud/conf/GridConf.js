@@ -6,6 +6,7 @@ const ActionType = require('../btn/ActionType');
 const BtnPosition = require('../btn/BtnPosition');
 const ColorType = require('../btn/ColorType');
 var inflection = require( 'inflection' );
+const Page = require('../../Models/Page');
 class GridConf {
   /**
    * 表格配置
@@ -142,18 +143,22 @@ class GridConf {
     return this;
   }
   async removeBtns(){
-    let pps= await global.request._user.permissionSql(global.request._user.id)
-    let path_arr=[];
-    let useable_btns=[];
-    pps.forEach(p => {
-      path_arr.push(p['path'])
-    });
+    let resource=inflection.tableize(this.table)
+    const Database = use('Database')
+    let page=await Database.table('pages').where('code', resource);
+    if(page.length>0){
+      let pps= await global.request._user.permissionSql(global.request._user.id)
+      let path_arr=[];
+      let useable_btns=[];
+      pps.forEach(p => {
+        path_arr.push(p['path'])
+      });
 
-    this.buttons.forEach(btn => {
-      let resource=inflection.tableize(this.table)
-      path_arr.find(item=>item.indexOf(`${resource}/${btn.action}`) >= 0)&&useable_btns.push(btn);
-    });
-    this.buttons=useable_btns;
+      this.buttons.forEach(btn => {
+        path_arr.find(item=>item.indexOf(`${resource}/${btn.action}`) >= 0)&&useable_btns.push(btn);
+      });
+      this.buttons=useable_btns;
+    }
   }
   async check(){
     await this.removeBtns()

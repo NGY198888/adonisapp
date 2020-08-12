@@ -8,6 +8,7 @@ const {validate}=use('Validator')
 const _lodash = require('lodash');
 const { unset } = require('lodash');
 const BtnAction = require('../../../crud/btn/BtnAction');
+const Page = require('../../../Models/Page');
 class CrudController {
     // //_开头作为私有方法的写法约定，此类不做为自动路由
     // _privateFun=()=>{}
@@ -284,12 +285,17 @@ class CrudController {
        * @param {string} permission 权限路径 页面的权限路径=资源名，按钮的权限路径=资源名.按钮名||资源名.自定义的按钮权限名
        */
       async can(resource,action){
-        let permission=resource
-        if(action)permission=permission+`/${action}`
-        let pps= await global.request._user.permissionSql(global.request._user.id)
-        .whereRaw(` p2.path like '%${permission}%' `)
-        if(pps.length==0){
-          throw new Error("权限不足")
+        const Database = use('Database')
+        resource=inflection.tableize(resource)
+        let page=await Database.table('pages').where('code', resource);
+        if(page.length>0){//未注册为页面的表不做限制
+          let permission=resource
+          if(action)permission=permission+`/${action}`
+          let pps= await global.request._user.permissionSql(global.request._user.id)
+          .whereRaw(` p2.path like '%${permission}%' `)
+          if(pps.length==0){
+            throw new Error("权限不足")
+          }
         }
       }
 

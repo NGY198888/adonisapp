@@ -48,7 +48,7 @@ class Comment extends Crud {
     */
     async onGridConf(gridConf,fields,formFields,viewFields,searchFields){
       gridConf.addBtn(
-        new BaseBtn('非常规方法',BtnPosition.Table,null,ActionType.API).setUrl(null,null,'test').check()
+        new BaseBtn('非常规方法',BtnPosition.Table,"test",ActionType.API).setUrl(null,null,'test').check()
       )
     }
 }
