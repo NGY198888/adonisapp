@@ -99,7 +99,7 @@ class SiteController extends CrudController {
                   }
             ]
         }
-       let rows =await new Page().baseQuery().fetch();
+       let rows =await new Page().baseQuery().orderBy('sort').fetch();
         rs.menu=rows.toJSON();
         return rs;
   }

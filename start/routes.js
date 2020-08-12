@@ -90,7 +90,7 @@ Route.group(() => {
 
 
 
-}).prefix("admin/api").middleware('auth');//
+}).prefix("admin/api")//.middleware('auth');//
 // Route.get('/:id','SetController.index')
 // Route.on('/').render('welcome')
 // Route.resource('/api/:resource', 'RestController')

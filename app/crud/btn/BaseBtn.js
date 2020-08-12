@@ -74,8 +74,13 @@ class BaseBtn {
   }
   /**检查按钮配置 */
   check(){
-
+    if(!this.action){
+      throw new Error('按钮缺少action');
+    }
     return this;
+  }
+  getAction(){
+    return this.action
   }
 
 }

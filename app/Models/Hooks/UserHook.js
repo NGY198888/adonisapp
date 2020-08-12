@@ -13,4 +13,3 @@ UserHook.addEmail = async (modelInstance) => {
       modelInstance.email =modelInstance.username
     }
 }
-

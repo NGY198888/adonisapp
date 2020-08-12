@@ -104,6 +104,9 @@ class GridConf {
           .setConfirmTips(needConfirm?"此操作将删除选中的所有记录!，您是否要继续？":null))
       return this;
   }
+  getBtns(){
+    return this.buttons;
+  }
   /**
    * 添加导入导出按钮
    */

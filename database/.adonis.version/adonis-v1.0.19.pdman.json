@@ -44,6 +44,12 @@
               "type": "DateTime",
               "remark": "",
               "chnname": "更新时间"
+            },
+            {
+              "name": "deleted_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "作废字段"
             }
           ],
           "indexs": [],
@@ -147,6 +153,18 @@
               "type": "LongKey",
               "remark": "",
               "chnname": "父菜单"
+            },
+            {
+              "name": "code",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "唯一编码"
+            },
+            {
+              "name": "sort",
+              "type": "Integer",
+              "remark": "",
+              "chnname": "排序"
             }
           ],
           "indexs": [],
@@ -312,6 +330,358 @@
             }
           ],
           "chnname": "网站配置"
+        },
+        {
+          "title": "roles",
+          "fields": [
+            {
+              "name": "id",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "表ID",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "name",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "名字"
+            },
+            {
+              "name": "des",
+              "type": "MiddleString",
+              "remark": "",
+              "chnname": "描述"
+            },
+            {
+              "name": "enabled",
+              "type": "YesNo",
+              "remark": "",
+              "chnname": "是否启用"
+            },
+            {
+              "name": "created_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "updated_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "角色"
+        },
+        {
+          "title": "role_user",
+          "fields": [
+            {
+              "name": "id",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "表ID",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "user_id",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "用户"
+            },
+            {
+              "name": "role_id",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "角色"
+            },
+            {
+              "name": "created_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "updated_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "用户角色表"
+        },
+        {
+          "title": "permission_role",
+          "fields": [
+            {
+              "name": "id",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "表ID",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "permission_id",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "权限"
+            },
+            {
+              "name": "role_id",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "角色"
+            },
+            {
+              "name": "created_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "updated_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "角色权限"
+        },
+        {
+          "title": "permission",
+          "fields": [
+            {
+              "name": "id",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "表ID",
+              "pk": true,
+              "notNull": true
+            },
+            {
+              "name": "code",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "权限编码"
+            },
+            {
+              "name": "name",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "名称"
+            },
+            {
+              "name": "pid",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "父权限"
+            },
+            {
+              "name": "created_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "创建时间"
+            },
+            {
+              "name": "updated_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "更新时间"
+            }
+          ],
+          "indexs": [],
+          "headers": [
+            {
+              "fieldName": "chnname",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "name",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "type",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "dataType",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "remark",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "pk",
+              "relationNoShow": false
+            },
+            {
+              "fieldName": "notNull",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "autoIncrement",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "defaultValue",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "relationNoShow",
+              "relationNoShow": true
+            },
+            {
+              "fieldName": "uiHint",
+              "relationNoShow": true
+            }
+          ],
+          "chnname": "权限"
         }
       ],
       "graphCanvas": {
@@ -546,14 +916,14 @@
       "associations": []
     }
   ],
-  "message": "添加网站配置表",
-  "version": "v1.0.9",
+  "message": "权限名称字段",
+  "version": "v1.0.19",
   "changes": [
     {
-      "type": "entity",
-      "name": "site",
+      "type": "field",
+      "name": "permission.name",
       "opt": "add"
     }
   ],
-  "date": "2020/8/5 0:4:27"
+  "date": "2020/8/12 17:45:28"
 }

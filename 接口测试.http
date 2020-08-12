@@ -39,7 +39,7 @@ POST {{url}}/admin/api/reg
 content-type: application/json
 
 {
-    "username":"admin3@163.com",
+    "username":"admin2@163.com",
     "password":"123456"
 
 }

@@ -36,7 +36,8 @@ class Page extends Crud {
           .setDBConf(true,true,'required')
           .setColumn(140)
           .check(),
-          new TabField('测试面板2'),
+          // new TabField('测试面板2'),
+          new TextField('唯一编码','code').setUIConf(true,true,true,false,false).setDBConf(true,true,"required").check(),
           new TextField('页面地址','url').setUIConf(true,true,true,true,true).setDBConf(true,false).check(),
           new IconField('图标','icon').setUIConf(true,true,true,true,true).setDBConf(true,false).check(),
           new SwitchField('是否菜单','isMenu').setUIConf(true,true,true,false,false)
@@ -53,7 +54,11 @@ class Page extends Crud {
           .check(),
           new SelectField('父级菜单','pid').setUIConf(false,true,false,false,false).setDBConf(true,false)
           .setData(pidData)
-          .check()
+          .check(),
+          new TextField('排序','sort').setUIConf(true,true,true,false,false).setDBConf(true,false)
+          .setTypeNumber()
+          .setVal(1)
+          .check(),
         ]
         return rs;
 

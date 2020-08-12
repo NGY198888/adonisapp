@@ -20,6 +20,8 @@ class Crud extends Model {
         this.addHook('afterCreate', 'CrudHook.createSubTable')
         this.addHook('beforeUpdate', 'CrudHook.updateSubTable')
         this.addHook('afterUpdate', 'CrudHook.updateSubTable')
+        this.addHook('afterFind', 'CrudHook.fethSubTable')
+        this.addHook('afterDelete', 'CrudHook.deleteSubTable')
 
    }
 

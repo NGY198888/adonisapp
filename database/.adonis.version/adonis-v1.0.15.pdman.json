@@ -44,6 +44,12 @@
               "type": "DateTime",
               "remark": "",
               "chnname": "更新时间"
+            },
+            {
+              "name": "deleted_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "作废字段"
             }
           ],
           "indexs": [],
@@ -604,6 +610,12 @@
               "chnname": "权限路径"
             },
             {
+              "name": "pcode",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "父权限"
+            },
+            {
               "name": "created_at",
               "type": "DateTime",
               "remark": "",
@@ -898,7 +910,14 @@
       "associations": []
     }
   ],
-  "message": "权限",
-  "version": "v1.0.13",
-  "date": "2020/8/11 12:39:33"
+  "message": "pcode",
+  "version": "v1.0.15",
+  "changes": [
+    {
+      "type": "field",
+      "name": "permission.pcode",
+      "opt": "add"
+    }
+  ],
+  "date": "2020/8/11 14:20:27"
 }

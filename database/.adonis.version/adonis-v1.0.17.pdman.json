@@ -44,6 +44,12 @@
               "type": "DateTime",
               "remark": "",
               "chnname": "更新时间"
+            },
+            {
+              "name": "deleted_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "作废字段"
             }
           ],
           "indexs": [],
@@ -502,7 +508,7 @@
           "chnname": "用户角色表"
         },
         {
-          "title": "role_permission",
+          "title": "permission_role",
           "fields": [
             {
               "name": "id",
@@ -601,7 +607,13 @@
               "name": "code",
               "type": "ShortString",
               "remark": "",
-              "chnname": "权限路径"
+              "chnname": "权限编码"
+            },
+            {
+              "name": "pid",
+              "type": "LongKey",
+              "remark": "",
+              "chnname": "父权限"
             },
             {
               "name": "created_at",
@@ -898,7 +910,19 @@
       "associations": []
     }
   ],
-  "message": "权限",
-  "version": "v1.0.13",
-  "date": "2020/8/11 12:39:33"
+  "message": "改中间表名",
+  "version": "v1.0.17",
+  "changes": [
+    {
+      "type": "entity",
+      "name": "permission_role",
+      "opt": "add"
+    },
+    {
+      "type": "entity",
+      "name": "role_permission",
+      "opt": "delete"
+    }
+  ],
+  "date": "2020/8/12 1:55:25"
 }

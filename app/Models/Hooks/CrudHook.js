@@ -99,3 +99,21 @@ CrudHook.updateSubTable= async (modelInstance) => {
   }
 }
 
+CrudHook.fethSubTable=async (modelInstance) => {
+  let subTable = modelInstance.subTable();
+  // lodash的forEach和[].forEach不支持await,如果非要一边遍历一边执行await,可使用for-of
+  // await subTable.forEach(async (sub) => {
+  // });
+  for (const sub of subTable) {
+    await modelInstance.load(sub);
+  }
+}
+CrudHook.deleteSubTable=async (modelInstance) => {
+  let subTable=  modelInstance.subTable();
+  subTable.forEach(async sub => {
+    await modelInstance.load(sub);
+    const sub_rows = modelInstance.getRelated(sub)
+    sub_rows.delete();
+  });
+
+}

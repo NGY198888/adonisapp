@@ -44,6 +44,12 @@
               "type": "DateTime",
               "remark": "",
               "chnname": "更新时间"
+            },
+            {
+              "name": "deleted_at",
+              "type": "DateTime",
+              "remark": "",
+              "chnname": "作废字段"
             }
           ],
           "indexs": [],
@@ -898,7 +904,14 @@
       "associations": []
     }
   ],
-  "message": "权限",
-  "version": "v1.0.13",
-  "date": "2020/8/11 12:39:33"
+  "message": "1",
+  "version": "v1.0.14",
+  "changes": [
+    {
+      "type": "field",
+      "name": "users.deleted_at",
+      "opt": "add"
+    }
+  ],
+  "date": "2020/8/11 12:44:23"
 }

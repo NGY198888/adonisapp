@@ -10,6 +10,7 @@ class RequestSetting {
         _user="用户:"+auth.user.username
       }
       request._user=auth.user;
+      await request._user.can()
       Logger.info(`请求 url:${request.url()}  ${loged?"已登录":"未登录"} ${_user} `);
    } catch (error) {
 

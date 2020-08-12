@@ -180,11 +180,27 @@ class BaseField {
 
   }
   /**
-   * 设置值的钩子
+   * 赋值的钩子
    * @param {*} row
    */
   onSetVal(row){
 
+  }
+  /**
+   * 设置取值的钩子
+   * @param {Function} onGetVal
+   */
+  setOnGetVal(onGetVal){
+    this.onGetVal=onGetVal
+    return this
+  }
+  /**
+   * 设置赋值的钩子
+   * @param {Function} onSetVal
+   */
+  SetOnSetVal(onSetVal){
+    this.onSetVal=onSetVal
+    return this
   }
 }
 module.exports=BaseField;
