@@ -610,6 +610,12 @@
               "chnname": "权限编码"
             },
             {
+              "name": "path",
+              "type": "Intro",
+              "remark": "",
+              "chnname": "权限路径"
+            },
+            {
               "name": "name",
               "type": "ShortString",
               "remark": "",

@@ -88,15 +88,33 @@ class User extends Crud {
   subTable(){
     return ['role_user'];
   }
-  /**
-   * 权限鉴定
-   * @param {string} permission 权限路径 页面的权限路径=资源名，按钮的权限路径=资源名.按钮名||资源名.自定义的按钮权限名
-   */
- async can(permission){
-  //  let res=  await Database.table({
-  //     "ur":"user_role"
-  //   }).select("*")
-  //   console.log(res);
+
+  basePermissionSql(uid){
+    const Database = use('Database')
+    let base=Database
+    .table('permission as p')
+    .joinRaw("left join permission as p2 on p.path  like concat(p2.path,'%') ")
+    .distinct()
+    if(uid=="0"){
+      return base
+    }
+    return  base
+    .innerJoin('permission_role as pr', 'pr.permission_id', 'p.id')
+    .innerJoin('role_user as ru', 'pr.role_id', 'ru.role_id')
+    .where('user_id',uid)
+  }
+  permissionSql(uid){
+    return this.basePermissionSql(uid)
+    .select("p2.*")
+    .orderBy('p2.path')
+  }
+  pageSql(uid){
+    return this.basePermissionSql(uid)
+    .innerJoin('pages',function() {
+      this.on('pages.code', '=', 'p.code').orOn('pages.code', '=', 'p2.code')
+    })
+    .select("pages.*")
+    .orderBy('pages.sort')
   }
 
 }

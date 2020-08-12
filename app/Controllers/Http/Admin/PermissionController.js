@@ -13,6 +13,7 @@ class PermissionController  extends CrudController  {
   }
 
   updatePermission= async({request, response })=>{
+     this.can(this.resource,"updatePermission");
      const Database = use('Database')
      let pages= await Database.table('pages').select();
      let rs= await Database.table('permission as p').select();
@@ -20,9 +21,18 @@ class PermissionController  extends CrudController  {
      rs.forEach(p => {
         map[`${p['code']}|${p['pid']}`]=p;
      });
+     let id_ps={}
+     pages.forEach(p => {
+      id_ps[p['id']]=p
+     });
      for (const p of pages) {
+       let path=p['code']
+       if(Object.prototype.hasOwnProperty.call(id_ps, p['pid'])){
+          path= id_ps[p['pid']]['code']+"/"+path
+       }
       let data={
         code:p['code'],
+        path:path,
         name:p['name'],
         pid:p['pid']||'-1',
         id:p['id'],
@@ -46,6 +56,7 @@ class PermissionController  extends CrudController  {
               code:action,
               pid:p['id'],
               name:btn['name'],
+              path:path+"/"+action,
             }
             if(Object.prototype.hasOwnProperty.call(map, `${data['code']}|${data['pid']}`)){
                data['id']=map[`${data['code']}|${data['pid']}`].id

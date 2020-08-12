@@ -17,13 +17,13 @@ class UserController {
     //  }
     let data=request.only(['password', 'username']);
     const rules = {
-        username: 'required|email',
+        username: 'required',
         password: 'required'
       }
       const msgs={
         'username.required': '用户名未填写',
         'password.required': '密码未填写',
-        'username.email': '用户名需要填写邮箱',
+        // 'username.email': '用户名需要填写邮箱',
       };
       const validation = await validate(request.all(), rules,msgs)
       if (validation.fails()) {

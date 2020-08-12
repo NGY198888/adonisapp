@@ -6,9 +6,9 @@ const getQueryStr=(obj)=>{
 }
 hooks.after.providersBooted(() => {
   const Database = use('Database')
-  // Database.on('query', (obj)=>{
-  //   console.log(getQueryStr(obj));
-  // })
+  Database.on('query', (obj)=>{
+   // let aaa=getQueryStr(obj)
+  })
   Database.on('query-error', (err, obj)=>{
    console.log(err, getQueryStr(obj));
   })

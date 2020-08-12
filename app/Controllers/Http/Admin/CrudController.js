@@ -7,6 +7,7 @@ var inflection = require( 'inflection' );
 const {validate}=use('Validator')
 const _lodash = require('lodash');
 const { unset } = require('lodash');
+const BtnAction = require('../../../crud/btn/BtnAction');
 class CrudController {
     // //_开头作为私有方法的写法约定，此类不做为自动路由
     // _privateFun=()=>{}
@@ -80,6 +81,7 @@ class CrudController {
       // };
       // rs.data= Array(10000).fill(item)
       // return rs; // 模拟大分页数据，结果在页面渲染那边卡很久
+      await this.can(this.resource)
       return new this.model().parseQuery(request);
     }
 
@@ -105,6 +107,7 @@ class CrudController {
        * @param {Response} ctx.response
        */
       async store ({ request, response,session }) {
+            await this.can(this.resource,BtnAction.Add)
             let _model=  this.model;
             let model_instance=new _model();
             let data =await this.getData(request, model_instance,'Add');
@@ -146,6 +149,7 @@ class CrudController {
        * @param {View} ctx.view
        */
       async show ({ params, request, response, view }) {
+        await this.can(this.resource,BtnAction.Show)
         if(params.id){
           let model_instance= await this.model.find(params.id);
           model_instance=model_instance .toJSON()
@@ -182,6 +186,7 @@ class CrudController {
        * @param {Response} ctx.response
        */
       async update ({ params, request, response }) {
+        await this.can(this.resource,BtnAction.Edit)
         let _model=  this.model;
         const model_instance= await _model.find(params.id);
         let data =await this.getData(request, model_instance,'Edit');
@@ -213,34 +218,40 @@ class CrudController {
        * @param {Response} ctx.response
        */
       async destroy ({ params, request, response }) {
+        await this.can(this.resource,BtnAction.Delete)
         const model_instance= await this.model.find(params.id);
         model_instance.delete()
         return {success:true}
       }
       /** 列表显示需要的数据 */
       async grid(){
+        await this.can(this.resource)
         console.log('进入crud grid');
         let data=new this.model().grid();
         return data
       }
        /** 表单显示需要的数据 */
       async form(){
+        await this.can(this.resource)
         console.log('进入crud form');
         return  new this.model().form()
 
       }
       /**查看显示需要的数据 */
       async view(){
+        await this.can(this.resource)
         console.log('进入crud view');
         return await new this.model().view()
       }
       async deleteAll({ params, request, response }){
+        await this.can(this.resource,BtnAction.Delete)
         console.log('进入 deleteAll');
         let ids= request.post()['ids']
         await (new this.model()).deleteAll(ids)
         return {message:'success'};
       }
       async formView({ params, request, response }){
+        await this.can(this.resource)
         console.log('进入formView');
         let _model=new this.model();
         let _form=await _model.form()
@@ -257,6 +268,7 @@ class CrudController {
         }
       }
       async formViewSave({ params, request, response }){
+        await this.can(this.resource)
         console.log('进入formViewSave');
         let _model=new this.model();
         let rows=await _model.baseQuery().fetch();
@@ -266,6 +278,19 @@ class CrudController {
         row.merge(data);
         await row.save();
         return  {message:'success'};
+      }
+       /**
+       * 权限鉴定
+       * @param {string} permission 权限路径 页面的权限路径=资源名，按钮的权限路径=资源名.按钮名||资源名.自定义的按钮权限名
+       */
+      async can(resource,action){
+        let permission=resource
+        if(action)permission=permission+`/${action}`
+        let pps= await global.request._user.permissionSql(global.request._user.id)
+        .whereRaw(` p2.path like '%${permission}%' `)
+        if(pps.length==0){
+          throw new Error("权限不足")
+        }
       }
 
 }

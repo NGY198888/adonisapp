@@ -100,7 +100,7 @@ class Crud extends Model {
        await this.onPagination(gridConf);
        await this.onAddCrudBtn(gridConf);
        await this.onGridConf(gridConf,fields,formFields,viewFields,searchFields);
-       return gridConf;
+       return await gridConf.check();
    }
    /**
     * 自定义gird配置

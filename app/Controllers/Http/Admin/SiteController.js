@@ -99,8 +99,21 @@ class SiteController extends CrudController {
                   }
             ]
         }
-       let rows =await new Page().baseQuery().orderBy('sort').fetch();
-        rs.menu=rows.toJSON();
+        // const Database = use('Database')
+        // let ps=await Database
+        // .table('permission as p')
+        // .joinRaw("left join permission as p2 on p.path  like concat(p2.path,'%') ")
+        // .innerJoin('permission_role as pr', 'pr.permission_id', 'p.id')
+        // .innerJoin('role_user as ru', 'pr.role_id', 'ru.role_id')
+        // .innerJoin('pages',function() {
+        //   this.on('pages.code', '=', 'p.code').orOn('pages.code', '=', 'p2.code')
+        // })
+        // .select("pages.*")
+        // .distinct()
+        // .where('user_id',global.request._user.id)
+        // .orderBy('pages.sort')
+        let ps=await global.request._user.pageSql(global.request._user.id)
+        rs.menu=ps;
         return rs;
   }
   async  home(){
