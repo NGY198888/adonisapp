@@ -67,7 +67,7 @@ class UserController {
    }
    async reg ({ request, response,session }) {
     let _model= User;
-    const rules = {
+      const rules = {
         username: 'required|email|unique:users,username',
         password: 'required'
       }
