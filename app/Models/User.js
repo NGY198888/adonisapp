@@ -14,7 +14,7 @@ const Database = use('Database')
 class User extends Crud {
   static boot () {
     super.boot()
-    this.addHook('beforeSave', 'UserHook.encryptionPwd')
+    // this.addHook('beforeSave', 'UserHook.encryptionPwd')
     this.addHook('beforeSave', 'UserHook.addEmail')
   }
   static get delete_at(){

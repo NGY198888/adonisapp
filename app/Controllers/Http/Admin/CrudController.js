@@ -114,9 +114,29 @@ class CrudController {
             let data =await this.getData(request, model_instance,'Add');
             await this.validate(response,request,model_instance);
             model_instance=Object.assign(model_instance,data);
+            await this.beforeAdd(model_instance)
             await model_instance.save();
+            await this.afterAdd(model_instance)
             return model_instance;
       }
+    async  beforeAdd(model_instance){
+
+    }
+    async  afterAdd(model_instance){
+
+    }
+    async  beforeEdit(model_instance){
+
+    }
+    async  afterEdit(model_instance){
+
+    }
+    async  beforeDelete(model_instance){
+
+    }
+    async  afterDelete(model_instance){
+
+    }
 
    async getData(request, model_instance,action='Add') {
       //新增时没有填的字段可能不会上传，导致该数据缺少字段，这里要将这些字段填空

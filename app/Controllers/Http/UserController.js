@@ -86,6 +86,7 @@ class UserController {
             message:validation.messages()
         });
       }
+      data.password= await Hash.make(data.password)
       data.email=data.username
       let user=new _model();
       user=Object.assign(user,data);

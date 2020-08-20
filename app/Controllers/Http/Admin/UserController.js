@@ -13,6 +13,9 @@ class UserController  extends CrudController{
   get resource(){
     return 'users'
   }
+  async  beforeAdd(model_instance){
+    model_instance.password=await Hash.make(model_instance.password||'123456')
+  }
   async formView({ params, request, response }){
     console.log('进入user formView');
     let _model=new this.model();
@@ -53,6 +56,7 @@ class UserController  extends CrudController{
           message:validation.messages()
       });
     }
+    data.password= await Hash.make(data.password)
     data.email=data.username
     row.merge(data);
     await row.save();
