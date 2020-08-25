@@ -10,6 +10,7 @@ const BtnPosition = require('../crud/btn/BtnPosition');
 const ActionType = require('../crud/btn/ActionType');
 const MultSelectField = require('../crud/field/MultSelectField');
 const { map } = require('lodash');
+const BtnAction = require('../crud/btn/BtnAction');
 const Database = use('Database')
 class User extends Crud {
   static boot () {
@@ -40,7 +41,7 @@ class User extends Crud {
           new TextField('_id','id').setUIConf(false,false,false,false,false).setDBConf(true,false).check(),
           new TextField('用户名','username').setUIConf(true,true,true,true,true).setVal("编辑的值").setDBConf(true,true,'required').check(),
           // new TextField('邮箱','email').setUIConf(true,true,true,false,false).setDBConf(true,false).check(),
-          new MultSelectField('角色','role_user').setUIConf(true,true,true,false,false)
+          new MultSelectField('角色','role_user').setUIConf(false,true,true,false,false)
           .setData(roles)
           .setOnGetVal((row)=>{
             row['role_user']=map( row['role_user'],(id)=>{
@@ -64,9 +65,11 @@ class User extends Crud {
     * @param {Array<BaseField>} searchFields
     */
   async onGridConf(gridConf,fields,formFields,viewFields,searchFields){
-    gridConf.addBtn(
-      new BaseBtn('测试',BtnPosition.Table,'Test',ActionType.API).setUrl(null,null,'test').check()
-    )
+    // gridConf.addBtn(
+    //  // new BaseBtn('测试',BtnPosition.Table,'Test',ActionType.API).setUrl(null,null,'test').check(),
+    //   new BaseBtn('导出所有',BtnPosition.Table,BtnAction.Export,ActionType.API).check()
+    // )
+    gridConf.addXlsBtn();
   }
 
   /**

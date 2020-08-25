@@ -148,6 +148,24 @@ class BaseField {
       this.valDic=dic
       return this;
    }
+   getDicTxt(row){
+     if(this.valDic){
+       if(isArray(this.valDic)){
+        let val=this.valDic.find(item=>item.id==row[this.field])
+        return val?val.txt:row[this.field]
+       }else{
+        let search_v= row[this.field]==null?"null":row[this.field];
+        let res=""
+        res=this.valDic[search_v];
+        return res!==undefined?res:row[this.field]
+       }
+     }else{
+       return row[this.field]
+     }
+   }
+   getExportType(){
+     return 'string';
+   }
    /**
    * 设置待选数据
    * @param {[array,Function,Promise]} data

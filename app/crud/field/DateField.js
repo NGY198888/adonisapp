@@ -1,4 +1,5 @@
 const BaseField= require('./BaseField');
+const util = require('../../utils/util');
 class DateField extends BaseField{
   /**
    * 日期时间字段
@@ -7,7 +8,7 @@ class DateField extends BaseField{
    */
   constructor(label, field = null){
     super(label, field)
-    this.type="date"
+    this.type="datetime"
   }
   /**
    * 设置类型
@@ -26,6 +27,22 @@ class DateField extends BaseField{
     }
 
     return this
+  }
+  getDicTxt(row){
+    let res="";
+    switch(this.type){
+      case "date":
+        res=util.dateFormat("YYYY-mm-dd", row[this.field])
+        break;
+      case "datetime":
+        res=util.dateFormat("YYYY-mm-dd HH:MM", row[this.field])
+        break;
+
+      default:
+        res= util.dateFormat("YYYY-mm-dd HH:MM", row[this.field])
+        break
+    }
+     return res;
   }
 }
 module.exports=DateField;

@@ -97,6 +97,7 @@ class Page extends Crud {
     */
    async onGridConf(gridConf,fields,formFields,viewFields,searchFields){
     gridConf.setTreeGrid('pid')
+    gridConf.addXlsBtn()
       // console.log(gridConf);
    }
    afterQuery(rows){

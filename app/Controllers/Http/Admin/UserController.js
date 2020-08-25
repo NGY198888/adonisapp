@@ -63,11 +63,62 @@ class UserController  extends CrudController{
     return  {message:'success'};
   }
   //这是一个自定义按钮的提交接口
-  test=async({request, response })=>{
+  test=async({request, response})=>{
        let {row,id,ids,where}=  request.all();
-       console.log(row,id,ids,where);
       let rs=  await new this.model().baseQuery().fetch()
-      return rs
+      const nodeExcel = require('excel-export');
+      const xlsx = require('node-xlsx');
+
+      async function readydata() {
+        //做点什么，如从数据库取数据
+        let exceldata=[
+            {name:"张三",age:"20",sex:"男",birthday:"1998-10-10"},
+            {name:"李四",age:"21",sex:"男",birthday:"1997-08-08"},
+            {name:"王五",age:"22",sex:"男",birthday:"1996-06-06"},
+            {name:"赵六",age:"20",sex:"男",birthday:"1998-12-12"},
+        ];
+        return exceldata;
+    }
+    //导出
+    async function exportdata(v) {
+        let conf ={};
+        conf.name = "mysheet";//表格名
+        let alldata = new Array();
+        for(let i = 0;i<v.length;i++){
+            let arr = new Array();
+            arr.push(v[i].name);
+            arr.push(v[i].age);
+            arr.push(v[i].sex);
+            arr.push(v[i].birthday);
+            alldata.push(arr);
+        }
+        //决定列名和类型
+        conf.cols = [{
+            caption:'姓名',
+            type:'string'
+        },{
+            caption:'年龄',
+            type:'number'
+        },{
+            caption:'性别',
+            type:'string'
+        },{
+            caption:'出生日期',
+            type:'string',
+            //width:280
+        }];
+        conf.rows = alldata;//填充数据
+        let result = nodeExcel.execute(conf);
+        let data =new  Buffer.from(result,'binary')
+        let realName = encodeURI("data.xlsx","GBK")
+        realName = realName.toString('iso8859-1')//中文附件名特殊处理
+        response.header('Content-Type', 'application/octet-stream');
+        response.header("Content-Disposition", "attachment; filename=" + realName);
+        return response.send(data);
+    }
+    let r=await readydata();
+    await exportdata(r);
+
   }
 
 

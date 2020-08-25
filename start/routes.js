@@ -25,6 +25,8 @@ const Helpers = use('Helpers')
 Route.get('/api/blog','BlogController.index')
 Route.post('admin/api/reg','UserController.reg')
 Route.post('admin/api/login','UserController.login')
+
+Route.get('admin/api/custom/users/test','Admin/UserController.test')
 let crud_list=['users','posts','site'];
 Route.group(() => {
     Route.post('/upload','FileUploadController.upload')
@@ -70,9 +72,11 @@ Route.group(() => {
             Route.get(`/form/${resource}`, `Admin/${controller}.formView`)
             Route.post(`/form/save/${resource}`, `Admin/${controller}.formViewSave`)
             Route.post(`/${resource}/deleteAll`, `Admin/${controller}.deleteAll`)
+            Route.get(`/${resource}/exportAll`, `Admin/${controller}.exportAll`)
             Route.get(`/${resource}/grid:id?`, `Admin/${controller}.grid`)
             Route.get(`/${resource}/form:id?`, `Admin/${controller}.form`)
             Route.get(`/${resource}/view:id?`, `Admin/${controller}.view`)
+
             Route.resource(`/${resource}`, `Admin/${controller}`)
        }
     }

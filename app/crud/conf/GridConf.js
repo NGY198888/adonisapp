@@ -160,8 +160,10 @@ class GridConf {
       this.buttons=useable_btns;
     }
   }
-  async check(){
-    await this.removeBtns()
+  async check(permission){
+    if(permission){
+      await this.removeBtns()
+    }
     return this;
   }
 }

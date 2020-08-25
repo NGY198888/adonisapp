@@ -47,7 +47,7 @@ class PermissionController  extends CrudController  {
         let _resource =inflection.classify( p['code'])
         try {
           const model = use('App/Models/' +_resource)
-          let conf =await new model().grid()
+          let conf =await new model().grid(false)
           let btns= conf.getBtns();
           btns=unionBy(btns,'action');
           for (const btn of btns) {

@@ -86,7 +86,7 @@ class Crud extends Model {
 //    ]
     throw new Error(this.name+' model未设置 fields 返回');
    }
-   async   grid(){
+   async   grid(permission=true){
        const _fields= await this.fields()
        let fields = this._fields2ObjArr(_fields,"grid");
        let formFields = this._fields2ObjArr(_fields,"form");
@@ -100,7 +100,7 @@ class Crud extends Model {
        await this.onPagination(gridConf);
        await this.onAddCrudBtn(gridConf);
        await this.onGridConf(gridConf,fields,formFields,viewFields,searchFields);
-       return await gridConf.check();
+       return await gridConf.check(permission);
    }
    /**
     * 自定义gird配置
@@ -244,7 +244,7 @@ class Crud extends Model {
     //此处一般用来连表，之后可能需要重新 selectFields   select 要在Join语句后面
     //query.leftJoin({'p2':'pages'}, 'p2.id', 'p1.pid')
   }
-  async parseQuery(request){
+  async parseQuery(request,paginate=true){
     let queryData= (request.all().query);
     queryData = JSON.parse(queryData|| "{}");
     const { page = 1, perPage = 10, sort = null, where = [] } = queryData;
@@ -272,7 +272,12 @@ class Crud extends Model {
     sort&&(query.orderBy(...sort.split(' ')))
     this.selectFields(query)
     this.beforeQuery(query,queryData)
-    let rows= await query.paginate(page,perPage);
+    let rows=null;
+    if(paginate){
+      rows= await query.paginate(page,perPage);
+    }else{
+      rows=await query.fetch();
+    }
     this.afterQuery(rows)
     return rows
   }

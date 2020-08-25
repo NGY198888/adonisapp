@@ -33,5 +33,11 @@ class TextField extends BaseField{
     this.type=type
     return this;
   }
+  getExportType(){
+    if(this.type=='number'){
+      return this.type;
+    }
+    return 'string';
+  }
 }
 module.exports=TextField;
