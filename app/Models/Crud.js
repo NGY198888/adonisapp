@@ -134,6 +134,16 @@ class Crud extends Model {
             fields,
         };
    }
+   async exportFields(){
+        const _fields= await this.fields()
+        let fields = this._fields2ObjArr(_fields,"exportAble");
+        return fields;
+    }
+    async importFields(){
+      const _fields= await this.fields()
+      let fields = this._fields2ObjArr(_fields,"importAble");
+      return fields;
+    }
     _fields2ObjArr(_fields,key) {
         const formFields = _lodash.filter(_fields, (_field) => {
             return !!_field[key];

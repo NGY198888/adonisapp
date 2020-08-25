@@ -329,39 +329,44 @@ class CrudController {
         let rows=await new this.model().parseQuery(request);
         return await this.exportData(response,rows.rows)
      }
+    async  onExport(data){
+      console.log("导出回调");
+    }
        //导出
       async  exportData(response,data) {
           const nodeExcel = require('excel-export');
+          const Antl = use('Antl')
           let conf ={};
-          conf.name = "sheet1";//表格名
           let alldata = new Array();
-          let grid=await new this.model().grid();
-          let fields=grid.tableFields
+          let _model=new this.model();
+          let table='table.'+this.model.table
+          conf.name =this.model.table;//这里不能设置未中文，不然导出的表格什么都没有
+          let fields=await _model.exportFields()
           for(let i = 0;i<data.length;i++){
               let arr = new Array();
               fields.forEach(field => {
-                let val=field.getDicTxt(data[i].$attributes)
-                arr.push(val);
+                arr.push(field.getDicTxt(data[i].$attributes));
               });
               alldata.push(arr);
           }
           //决定列名和类型
           conf.cols = [];
-        fields.forEach(field => {
-          conf.cols.push({
-            caption:field.label,
-            type:field.getExportType(),
-            width:30,
+          fields.forEach(field => {
+            conf.cols.push({
+              caption:field.label,
+              type:field.getExportType(),
+              width:field.getExportWidth(),
+            });
           });
-        });
-
+          await this.onExport(alldata);
           conf.rows = alldata;//填充数据
           let result = nodeExcel.execute(conf);
           let data_bf =new  Buffer.from(result,'binary')
-          let realName = encodeURI(grid.table+"_data.xlsx","GBK")
+          let realName = encodeURI(Antl.formatMessage(table)+"_数据.xlsx","GBK")
           realName = realName.toString('iso8859-1')//中文附件名特殊处理
           response.header('Content-Type', 'application/vnd.openxmlformats');
-          response.header("Content-Disposition", "attachment; filename=" + realName);
+          response.header('Access-Control-Expose-Headers', 'Content-Disposition')
+          response.header("Content-Disposition", "attachment; filename="+realName);
           return response.send(data_bf);
       }
 

@@ -35,6 +35,12 @@ class BaseField {
 
         this.data=[];
         this.width=null
+
+        //导入导出
+        this.exportAble=false;
+        this.exportType='string';
+        this.exportWidth=25;
+        this.importAble=false
     }
     /**
      * UI配置
@@ -47,6 +53,7 @@ class BaseField {
      */
     setUIConf(grid, form = false, view = false, searchable = false, sortable = false) {
         this.grid = grid;
+        this.setExport(grid,'string',25,grid);
         this.form = form;
         this.view = view;
         this.save = true;
@@ -163,8 +170,25 @@ class BaseField {
        return row[this.field]
      }
    }
+   /**
+    * 设置导入导出
+    * @param {boolean} exportAble 该字段是否支持导出
+    * @param {string} exportType 导出类型
+    * @param {number} exportWidth 导出的宽度
+    * @param {boolean} importAble 该字段是否支持导入
+    */
+   setExport(exportAble=true,exportType='string',exportWidth=25,importAble=true){
+    this.exportAble=exportAble;
+    this.exportType=exportType;
+    this.exportWidth=exportWidth;
+    this.importAble=importAble;
+    return this;
+   }
    getExportType(){
-     return 'string';
+     return this.exportType;
+   }
+   getExportWidth(){
+     return this.exportWidth;
    }
    /**
    * 设置待选数据
