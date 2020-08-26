@@ -373,6 +373,11 @@ class CrudController {
     async readSheets(request) {
       const xlsx = require('node-xlsx');
       const profilePic = request.file('file');
+      const extnames= ['xlsx','xls']
+      if(extnames.indexOf(profilePic.extname)==-1){
+        throw new Error('上传文件格式不对');
+      }
+
       const tableName = this.model.table;
       const sheets = xlsx.parse(profilePic.tmpPath);
       if (sheets.length === 0) {
