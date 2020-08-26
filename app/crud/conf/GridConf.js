@@ -113,8 +113,8 @@ class GridConf {
    * 添加导入导出按钮
    */
   addXlsBtn(){
-    this.addBtn(new BaseBtn('导入',BtnPosition.Table,BtnAction.Import,ActionType.FORM))
-        .addBtn(new BaseBtn('导出',BtnPosition.Table,BtnAction.Export,ActionType.API))
+    this.addBtn(new BaseBtn('导入',BtnPosition.Table,BtnAction.Import,ActionType.API).setUI('fa fa-upload',ColorType.primary))
+        .addBtn(new BaseBtn('导出',BtnPosition.Table,BtnAction.Export,ActionType.API).setUI('fa fa-download',ColorType.info))
     return this;
   }
  /**

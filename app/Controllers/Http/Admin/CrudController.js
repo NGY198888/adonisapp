@@ -6,7 +6,7 @@ var inflection = require( 'inflection' );
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Validator')} */
 const {validate}=use('Validator')
 const _lodash = require('lodash');
-const { unset } = require('lodash');
+const { unset, filter } = require('lodash');
 const BtnAction = require('../../../crud/btn/BtnAction');
 const Page = require('../../../Models/Page');
 class CrudController {
@@ -329,13 +329,88 @@ class CrudController {
         let rows=await new this.model().parseQuery(request);
         return await this.exportData(response,rows.rows)
      }
-    async  onExport(data){
-      console.log("导出回调");
-    }
+      async importXls({ request, response }){
+        let{sheets,sheet_main}=  await this.readSheets(request);
+        let rows= await  this.parseXlsData(sheet_main);
+        await this.insertXlsData(rows,sheets)
+        return  {message:'success'};
+     }
+     async insertXlsData(rows,sheets){
+        const Database = use('Database')
+        const trx = await Database.beginTransaction()
+        try {
+          await this.model.createMany(rows,trx)
+          await trx.commit()
+        } catch (error) {
+          await trx.rollback()
+          throw new Error(error.message);
+        }
+     }
+     async parseXlsData(sheet_main){
+       let _model=new this.model()
+        let datas= sheet_main.data//每行数据都是一个数组
+        let  headers=datas.shift()//第一行是表头
+        let fields=await _model.fields()
+        let rows=[];
+        if(datas.length==0)
+        {
+          throw new Error("导入表格未填写数据");
+        }
+        datas.forEach(data => {
+            let row={};
+             fields.forEach(field => {
+                let index=headers.indexOf(field.label);
+                if(field.label!=null&&index>-1)
+                {
+                  row[field.field]=data[index]
+                  row[field.field]= field.getDicVal(row)
+                }
+             });
+             rows.push(row)
+        });
+        return rows;
+     }
+    async readSheets(request) {
+      const xlsx = require('node-xlsx');
+      const profilePic = request.file('file');
+      const tableName = this.model.table;
+      const sheets = xlsx.parse(profilePic.tmpPath);
+      if (sheets.length === 0) {
+        throw new Error('上传的是空表格');
+      }
+      const sheet = sheets.find(ss => ss.name == tableName);
+      if (!sheet) {
+        throw new Error('必须有名为"' + tableName + '"的工作表');
+      }
+      return {sheets,sheet_main:sheet}
+  }
+
+     async importTpl({ params, request, response }){
+        // 下载导入模板
+        let _model=new this.model();
+        let table='table.'+this.model.table
+        let conf ={};
+        conf.name =this.model.table;//这里不能设置未中文，不然导出的表格什么都没有
+        let fields=await _model.importFields()
+        //决定列名和类型
+        conf.cols = [];
+        fields.forEach(field => {
+          conf.cols.push({
+            caption:field.label,
+            type:field.getExportType(),
+            width:field.getExportWidth(),
+          });
+        });
+        conf.rows =[];
+        return  this.xlsx( conf, table, response,'模板')
+     }
+      async  onExport(data){
+        console.log("导出回调");
+      }
        //导出
       async  exportData(response,data) {
-          const nodeExcel = require('excel-export');
-          const Antl = use('Antl')
+
+
           let conf ={};
           let alldata = new Array();
           let _model=new this.model();
@@ -360,17 +435,23 @@ class CrudController {
           });
           await this.onExport(alldata);
           conf.rows = alldata;//填充数据
-          let result = nodeExcel.execute(conf);
-          let data_bf =new  Buffer.from(result,'binary')
-          let realName = encodeURI(Antl.formatMessage(table)+"_数据.xlsx","GBK")
-          realName = realName.toString('iso8859-1')//中文附件名特殊处理
-          response.header('Content-Type', 'application/vnd.openxmlformats');
-          response.header('Access-Control-Expose-Headers', 'Content-Disposition')
-          response.header("Content-Disposition", "attachment; filename="+realName);
-          return response.send(data_bf);
+          return this.xlsx( conf, table, response);
       }
 
 
+
+  xlsx( conf, table, response,tail='') {
+    const Antl = use('Antl')
+    const nodeExcel = require('excel-export');
+    let result = nodeExcel.execute(conf);
+    let data_bf = new Buffer.from(result, 'binary');
+    let realName = encodeURI(Antl.formatMessage(table) +tail+ ".xlsx", "GBK");
+    realName = realName.toString('iso8859-1'); //中文附件名特殊处理
+    response.header('Content-Type', 'application/vnd.openxmlformats');
+    response.header('Access-Control-Expose-Headers', 'Content-Disposition');
+    response.header("Content-Disposition", "attachment; filename=" + realName);
+    return response.send(data_bf);
+  }
 }
 
 module.exports = CrudController

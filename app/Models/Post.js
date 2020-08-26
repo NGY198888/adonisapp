@@ -46,6 +46,9 @@ class Post extends Crud {
       ]
       return rs;
     }
+    async onGridConf(gridConf,fields,formFields,viewFields,searchFields){
+      gridConf.addXlsBtn();
+    }
     subTable(){
       return ['comments'];
     }

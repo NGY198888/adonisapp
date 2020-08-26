@@ -1,4 +1,4 @@
-const { isNull, isArray, isObject } = require("lodash");
+const { isNull, isArray, isObject, map } = require("lodash");
 const ColumnTpl = require("./ColumnTpl");
 class BaseField {
   /**
@@ -152,24 +152,45 @@ class BaseField {
      if(!isObject(dic)){
        throw new Error('字段值映射请传对象');
      }
+      dic = this.jsonModelArr(dic);
       this.valDic=dic
       return this;
    }
    getDicTxt(row){
+     let rs=row[this.field];
      if(this.valDic){
        if(isArray(this.valDic)){
         let val=this.valDic.find(item=>item.id==row[this.field])
-        return val?val.txt:row[this.field]
+        rs=val?val.txt:row[this.field]
        }else{
         let search_v= row[this.field]==null?"null":row[this.field];
         let res=""
         res=this.valDic[search_v];
-        return res!==undefined?res:row[this.field]
+        rs=res!==undefined?res:row[this.field]
        }
-     }else{
-       return row[this.field]
      }
+     return rs;
    }
+   getDicVal(row){
+    let rs=row[this.field];
+    if(this.valDic){
+      if(isArray(this.valDic)){
+       let val=this.valDic.find(item=>item.txt==row[this.field])
+        rs=val?val.id:row[this.field]
+      }else{
+        if(row[this.field]){
+          for (const key in this.valDic) {
+            if(this.valDic[key]==row[this.field])
+            {
+              rs= key;
+              break;
+            }
+          }
+        }
+      }
+    }
+    return rs;
+  }
    /**
     * 设置导入导出
     * @param {boolean} exportAble 该字段是否支持导出
@@ -195,10 +216,20 @@ class BaseField {
    * @param {[array,Function,Promise]} data
    */
   setData(data=[]){
+    data = this.jsonModelArr(data);
     this.data=data
     this.setValDic(data)
     return this;
   }
+  jsonModelArr(data) {
+    if (isArray(data)) {
+      data = map(data, (row) => {
+        return row.toJSON ? row.toJSON() : row;
+      });
+    }
+    return data;
+  }
+
   /**
    * 有的表格组件，比如一对多子表，可以隐藏左边的label
    */

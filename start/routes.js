@@ -34,10 +34,10 @@ Route.group(() => {
     Route.get('/site/settings','Admin/SiteController.settings')
     Route.post('/site/settings','Admin/SiteController.save_settings')
     Route.get('/home','Admin/SiteController.home')
-    Route.get('/posts/grid:id?', 'Admin/PostController.grid')
-    Route.get('/posts/form:id?', 'Admin/PostController.form')
-    Route.get('/posts/view:id?', 'Admin/PostController.view')
-    Route.resource('/posts', 'Admin/PostController')
+    // Route.get('/posts/grid:id?', 'Admin/PostController.grid')
+    // Route.get('/posts/form:id?', 'Admin/PostController.form')
+    // Route.get('/posts/view:id?', 'Admin/PostController.view')
+    // Route.resource('/posts', 'Admin/PostController')
     // for (let index = 0; index < crud_list.length; index++) {
     //     //优先匹配这里
     //     const resource = crud_list[index];
@@ -73,6 +73,8 @@ Route.group(() => {
             Route.post(`/form/save/${resource}`, `Admin/${controller}.formViewSave`)
             Route.post(`/${resource}/deleteAll`, `Admin/${controller}.deleteAll`)
             Route.get(`/${resource}/exportAll`, `Admin/${controller}.exportAll`)
+            Route.get(`/${resource}/importTpl`, `Admin/${controller}.importTpl`)
+            Route.post(`/${resource}/importXls`, `Admin/${controller}.importXls`)
             Route.get(`/${resource}/grid:id?`, `Admin/${controller}.grid`)
             Route.get(`/${resource}/form:id?`, `Admin/${controller}.form`)
             Route.get(`/${resource}/view:id?`, `Admin/${controller}.view`)
