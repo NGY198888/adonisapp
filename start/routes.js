@@ -25,10 +25,11 @@ const Helpers = use('Helpers')
 Route.get('/api/blog','BlogController.index')
 Route.post('admin/api/reg','UserController.reg')
 Route.post('admin/api/login','UserController.login')
-
+Route.get('/authenticated/github', 'LoginController.callback')
 Route.get('admin/api/custom/users/test','Admin/UserController.test')
 let crud_list=['users','posts','site'];
 Route.group(() => {
+    Route.get('/login/github', 'LoginController.redirect')
     Route.post('/upload','FileUploadController.upload')
     Route.get('/site','Admin/SiteController.site')
     Route.get('/site/settings','Admin/SiteController.settings')

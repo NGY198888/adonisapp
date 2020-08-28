@@ -22,6 +22,7 @@ const providers = [
   '@adonisjs/validator/providers/ValidatorProvider',
   '@adonisjs/antl/providers/AntlProvider',
   '@adonisjs/drive/providers/DriveProvider',
+  '@adonisjs/ally/providers/AllyProvider',
   // 'lucid-mongo/providers/LucidMongoProvider',
 
   'adonis-rest/providers/RestProvider',

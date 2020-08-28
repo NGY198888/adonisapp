@@ -355,6 +355,12 @@
               "chnname": "描述"
             },
             {
+              "name": "code",
+              "type": "ShortString",
+              "remark": "",
+              "chnname": "编码"
+            },
+            {
               "name": "enabled",
               "type": "YesNo",
               "remark": "",

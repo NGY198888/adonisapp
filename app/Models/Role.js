@@ -29,6 +29,7 @@ class Role extends Crud {
     let rs= [
       new TextField('_id','id').setUIConf(false,false,false,false,false).setDBConf(true,false).check(),
       new TextField('名称','name').setUIConf(true,true,false,false,false).setDBConf(true,true,'required').check(),
+      new TextField('编码','code').setUIConf(true,true,true,false,false).setDBConf(true,true,'required').check(),
       new TextField('描述','des').setUIConf(true,true,true,false,false).setDBConf(true,false)
       .setTypeTextarea(5)
       .check(),
