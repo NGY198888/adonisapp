@@ -53,7 +53,7 @@ class User extends Crud {
           })
           .setDBConf(true,false).check(),
           new DateField('更新时间','updated_at').setUIConf(true,false,true,false,false).setDBConf(true,false).check(),
-          new DateField('创建时间','created_at').setUIConf(true,false,true,false,false).setDBConf(true,false).check(),
+          new DateField('创建时间','created_at').setUIConf(true,false,true,true,true).setDBConf(true,false).check(),
         ]
   }
   /**

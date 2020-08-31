@@ -379,12 +379,12 @@ class CrudController {
       }
 
       const tableName = this.model.table;
-      const sheets = xlsx.parse(profilePic.tmpPath);
+      const sheets =await xlsx.parse(profilePic.tmpPath);
       if (sheets.length === 0) {
         throw new Error('上传的是空表格');
       }
       const sheet = sheets.find(ss => ss.name == tableName);
-      if (!sheet) {
+      if (!sheet||sheet==-1) {
         throw new Error('必须有名为"' + tableName + '"的工作表');
       }
       return {sheets,sheet_main:sheet}
