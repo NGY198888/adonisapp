@@ -6,6 +6,7 @@ const _lodash = require('lodash');
 const GridConf = require('../crud/conf/GridConf');
 const BaseBtn = require('../crud/btn/BaseBtn');
 const BaseField = require('../crud/field/BaseField');
+const FieldTypeMap = require('../crud/field/FieldTypeMap');
 // /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('Model')
 // const ErrCode=require('../ErrCode')
@@ -265,7 +266,7 @@ class Crud extends Model {
         let instance=null;
 
         try {
-           let clazz=use(`App/crud/field/${field.type}Field`)
+           let clazz=use(`App/crud/field/${FieldTypeMap[field.type]}`)
            instance=new clazz(field.label,field.field,field.val);
            instance=Object.assign(instance,field)
         } catch (error) {
