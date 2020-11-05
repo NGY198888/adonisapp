@@ -1,4 +1,4 @@
-# Adonis fullstack application
+# 前后端分离的基于Adonisjs的restful风格的后端系统。前端项目是vue_admin
 
 This is the fullstack boilerplate for AdonisJs, it comes pre-configured with.
 
