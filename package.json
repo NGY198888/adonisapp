@@ -37,7 +37,7 @@
     "excel4node": "^1.7.2",
     "lodash": "^4.17.19",
     "lucid-mongo": "^3.1.6",
-    "moment": "^2.27.0",
+    "moment": "^2.29.2",
     "mysql": "^2.18.1",
     "node-xlsx": "^0.15.0",
     "string-random": "^0.1.3",
